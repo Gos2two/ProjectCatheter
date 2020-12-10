@@ -24,8 +24,9 @@ public class PlotUIElectrodes {
 
     public PlotUIElectrodes() {
         mainPanel=new JPanel();
-        dataset = createDataset();
-        chart = new ArrayList<JFreeChart>();
+        //Initialize data from electrodes
+        dataset= createDataset();
+        chart=new ArrayList<JFreeChart>();
 
         //Set Layouts
         mainPanel.setLayout(new GridLayout(4,4));
@@ -46,18 +47,9 @@ public class PlotUIElectrodes {
         XYSeriesCollection dataset=new XYSeriesCollection();
         XYSeries series1=new XYSeries("Object 1");
 
-        ArrayList<Double> series=new ArrayList<Double>();
+        ArrayList<Double> series = new ArrayList<Double>();
         series.add(1.0);
         series.add(2.0);
-        series.add(3.0);
-        series.add(4.0);
-        series.add(5.0);
-        series.add(8.0);
-        series.add(10.0);
-        series.add(14.0);
-        series.add(18.0);
-        series.add(25.0);
-        series.add(50.0);
 
         for(double i=0; i<series.size(); i++)
         {
