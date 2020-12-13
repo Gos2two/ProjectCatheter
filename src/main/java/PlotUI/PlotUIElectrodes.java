@@ -1,5 +1,6 @@
 package PlotUI;
 
+import org.apache.commons.collections4.ArrayStack;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -21,16 +22,22 @@ public class PlotUIElectrodes {
     protected JPanel mainPanel;
     protected XYDataset dataset;
     protected ArrayList<JFreeChart> chart;
+    protected Double[][] electrodeData;
 
-    public PlotUIElectrodes() {
+    public PlotUIElectrodes(ReadExcel readExcel) {
         mainPanel=new JPanel();
-        dataset = createDataset();
-        chart = new ArrayList<JFreeChart>();
+        //Initialize data from electrodes
+        electrodeData=readExcel.getDataset();
+        Double[] oneElectrode = new Double[electrodeData.length];
+        chart=new ArrayList<JFreeChart>();
 
         //Set Layouts
         mainPanel.setLayout(new GridLayout(4,4));
-        for(int i=0; i<16;i++)
-        {
+        for(int i=0; i<16;i++) {
+            for(int j=0; j<oneElectrode.length; j++){
+                oneElectrode[j]=electrodeData[j][i];
+            }
+            dataset=createDataset(oneElectrode);
             chart.add(createChart(dataset,"Electrode "+ (i+1))); //Add charts for each electrode
             ChartPanel chartPanel = new ChartPanel(chart.get(i));
             chartPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -42,28 +49,13 @@ public class PlotUIElectrodes {
 
     }
     public JPanel getMainPanel() {return mainPanel;}
-    private XYDataset createDataset(){
+    private XYDataset createDataset(Double[] electrode){
         XYSeriesCollection dataset=new XYSeriesCollection();
         XYSeries series1=new XYSeries("Object 1");
 
-        ArrayList<Double> series=new ArrayList<Double>();
-        series.add(1.0);
-        series.add(2.0);
-        series.add(3.0);
-        series.add(4.0);
-        series.add(5.0);
-        series.add(8.0);
-        series.add(10.0);
-        series.add(14.0);
-        series.add(18.0);
-        series.add(25.0);
-        series.add(50.0);
-
-        for(double i=0; i<series.size(); i++)
-        {
-            series1.add(i,series.get((int)i));
+        for(double i=0; i<electrode.length; i++) {
+            series1.add(i,electrode[(int) i]);
         }
-
         dataset.addSeries(series1);
 
         return dataset;
