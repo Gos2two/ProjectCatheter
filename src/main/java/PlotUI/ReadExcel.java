@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -23,9 +22,6 @@ public class ReadExcel {
         Dialog();
         OpenExcelFile();
         printDataset();
-
-        //Terminate app after the window is closed
-        System.exit(0);
     }
 
     private void OpenExcelFile(){
@@ -111,6 +107,7 @@ public class ReadExcel {
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
             setPath(selectedFile.getAbsolutePath());
         }
+
     }
 
     private void setPath(String path){
