@@ -1,7 +1,6 @@
 package PlotUI;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -99,9 +98,9 @@ public class ReadExcel {
 
 
         //Create a file chooser
-       JFileChooser fileChooser = new JFileChooser();
-       fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-       int result = fileChooser.showOpenDialog(frame);
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = fileChooser.showOpenDialog(frame);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());

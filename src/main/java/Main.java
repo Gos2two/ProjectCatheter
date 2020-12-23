@@ -1,4 +1,4 @@
-import PlotUI.PlotUIElectrodes;
+import PlotUI.PlotUISingle;
 import PlotUI.ReadExcel;
 
 import javax.swing.*;
@@ -13,8 +13,8 @@ public class Main {
         JFrame frame = new JFrame(gc); // Create a new JFrame
         frame.setSize(10000, 10000);
 
-        PlotUIElectrodes plotUIElectrodes = new PlotUIElectrodes(readExcel);
-        frame.getContentPane().add(plotUIElectrodes.getMainPanel());
+        PlotUISingle plotUIsingle = new PlotUISingle(readExcel);
+        frame.getContentPane().add(plotUIsingle.getMainPanel());
         frame.setTitle("Catheter readings");
         frame.setVisible(true);
         // This next line closes the program when the frame is closed
