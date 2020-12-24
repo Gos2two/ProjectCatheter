@@ -3,6 +3,8 @@ package PlotUI;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -15,6 +17,8 @@ import org.jfree.data.xy.XYSeriesCollection;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+
+import static java.lang.StrictMath.abs;
 
 public class PlotUISingle {
     protected JPanel mainPanel;
@@ -50,6 +54,13 @@ public class PlotUISingle {
 
         XYPlot plot = chart.getXYPlot();
 
+        NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();                          //remove labels and add a solid line for each zero
+        yAxis.setTickMarksVisible(false);
+        yAxis.setTickLabelsVisible(false);
+        yAxis.setTickUnit(new NumberTickUnit(2 * getmaxelement(oneElectrode)));
+
+        plot.setRangeGridlineStroke(new BasicStroke());
+
         SamplingXYLineRenderer renderer = new SamplingXYLineRenderer();
         renderer.setSeriesPaint(0, Color.RED);
         renderer.setSeriesStroke(0, new BasicStroke(2.0f));
@@ -77,6 +88,20 @@ public class PlotUISingle {
         return mainPanel;
     }
 
+    public double getmaxelement(Double[] electrode){               //gets largest single value, positive or negative. Needed for separating the graphs
+        double maxelement = 0;
+
+        for(int i=0; i<16;i++) {
+
+            for (int j = 0; j < electrode.length; j++) {
+                if(abs(electrodeData[j][i]) > maxelement){
+                    maxelement = abs(electrodeData[j][i]);
+                }
+            }
+        }
+        return maxelement;
+    }
+
     private XYDataset createDataset(Double[] electrode){
         XYSeriesCollection dataset=new XYSeriesCollection();
 
@@ -85,7 +110,7 @@ public class PlotUISingle {
             XYSeries series=new XYSeries("Electrode "+(i+1));
 
             for (int j = 0; j < electrode.length; j++) {
-                electrode[j] = electrodeData[j][i];
+                electrode[j] = electrodeData[j][i] - i * 2 * getmaxelement(electrode);
             }
             for (double k = 0; k < electrode.length; k++) {
                 series.add(k, electrode[(int) k]);
