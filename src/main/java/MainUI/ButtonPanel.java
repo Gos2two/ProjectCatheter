@@ -1,5 +1,7 @@
 package MainUI;
 
+import DataHandeling.ElectodeDB;
+import DataHandeling.ReadExcelFile;
 import DataHandeling.UserDialogues;
 import GridPlotUI.GridPlotWindow;
 import SinglePlotUI.SinglePlotWindow;
@@ -13,6 +15,7 @@ public class ButtonPanel extends JPanel {
     protected JButton singlePlotB;
     protected JButton inputDataB;
     protected UserDialogues userDialogues;
+    protected ElectodeDB ElectodeDB;
 
     public ButtonPanel(){
         //Define
@@ -20,6 +23,7 @@ public class ButtonPanel extends JPanel {
         singlePlotB=new JButton("SINGLE PLOT");
         inputDataB=new JButton("INPUT DATA");
         userDialogues=new UserDialogues();
+
 
         //Add
         add(inputDataB);
@@ -43,6 +47,8 @@ public class ButtonPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 userDialogues.getFileSource();
+                ElectodeDB =  new ElectodeDB(userDialogues.getExcelFilePath());
+                ElectodeDB.printElectodes();
             }
         });
     }
