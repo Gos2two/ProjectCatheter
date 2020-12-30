@@ -17,14 +17,11 @@ public class ElectrodeDB {
 
 
         for(int i=0;i<Data[0].length;i++){
+            tempData = new Double[Data.length];
             for(int j=0;j<Data.length;j++){
                 tempData[j] = Data[j][i];
             }
             ElectrodeArray[i] = new Unipolar(names[i],tempData);
-            if(ElectrodeArray[i].getData() == tempData)
-            {
-                System.out.println("Correct");
-            }
         }
     }
 
