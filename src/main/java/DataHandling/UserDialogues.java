@@ -1,12 +1,12 @@
-package DataHandeling;
+package DataHandling;
 
 import javax.swing.*;
 import java.io.File;
 
 public class UserDialogues {
     protected String excelFilePath;
-    public UserDialogues(){
 
+    public UserDialogues(){
     }
     public String getExcelFilePath(){
         return excelFilePath;
