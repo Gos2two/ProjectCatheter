@@ -1,12 +1,10 @@
-package PlotUI;
+package DataHandeling;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,18 +12,15 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class ReadExcel {
+public class ReadExcelFile {
     private Double [][] Dataset;
-    private String path;
+    private String [] ElectrodeNames;
 
-    public ReadExcel(){
-        Dialog();
-        OpenExcelFile();
-        printDataset();
+    public ReadExcelFile(String path){
+        OpenExcelFile(path);
     }
 
-    private void OpenExcelFile(){
-
+    private void OpenExcelFile(String path){
         try {
             FileInputStream file = new FileInputStream(new File(path));
             //Create Workbook instance holding reference to .xlsx file
@@ -39,7 +34,7 @@ public class ReadExcel {
             int num_cols = sheet.iterator().next().getLastCellNum();
             //System.out.println(sheet.iterator().next().getLastCellNum());
             //System.out.println(sheet.getLastRowNum());
-            initDataset(num_rows,num_cols);
+            initFields(num_rows,num_cols);
 
             //Iterate through each rows one by one
             Iterator<Row> rowIterator = sheet.iterator();
@@ -64,6 +59,7 @@ public class ReadExcel {
                             break;
                         case STRING:
                             //System.out.print(cell.getStringCellValue());
+                            ElectrodeNames[col_num] = cell.getStringCellValue();
                             break;
                     }
                     col_num++;
@@ -79,38 +75,21 @@ public class ReadExcel {
         }
     }
 
-    private void initDataset(int num_rows,int num_cols){
+    private void initFields(int num_rows,int num_cols){
         Dataset = new Double[num_rows][num_cols];
+        ElectrodeNames = new String[num_cols];
     }
 
-    public void printDataset(){
+    public void printFields(){
         System.out.println(Arrays.deepToString(Dataset));
+        System.out.println(Arrays.toString(ElectrodeNames));
     }
 
     public Double[][] getDataset() {
         return Dataset;
     }
 
-    private void Dialog(){
-        //Frame and Panel for the Dialog Window.
-        JFrame  frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
-
-
-        //Create a file chooser
-       JFileChooser fileChooser = new JFileChooser();
-       fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-       int result = fileChooser.showOpenDialog(frame);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-            setPath(selectedFile.getAbsolutePath());
-        }
-
-    }
-
-    private void setPath(String path){
-        this.path = path;
+    public String[] getElectrodeNames(){
+        return ElectrodeNames;
     }
 }
