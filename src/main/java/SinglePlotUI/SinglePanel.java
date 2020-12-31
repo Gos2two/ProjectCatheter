@@ -5,6 +5,7 @@ import DataHandling.Unipolar;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -14,9 +15,12 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import java.awt.event.ActionEvent;
+import java.util.Arrays;
+import java.util.Collections;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 import static java.lang.StrictMath.abs;
 
@@ -27,33 +31,42 @@ public class SinglePanel extends JPanel {
     protected JPanel controlPanel;
 
     public SinglePanel(ElectrodeDB electrodeDB){
+
         controlPanel= new JPanel();
-        scrollPane = new JScrollPane(controlPanel);
+        scrollPane = new JScrollPane(controlPanel);//create scrollpane that will act on controlPanel
 
         //Set layout according to size of the grid: input from user dialogue.
         setDimensions();
         setLayout(new GridLayout(1,1));
-        controlPanel.setLayout(new GridLayout(numRows*numCol,1));
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        controlPanel.setLayout(new GridLayout(numRows*numCol,1));//sets layout of control panel(subplot layout)
+
+        //instantiates when the scroll bars will appear( when necessary)
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
         //Instantiate ElectrodeArray: data from user : Data Handling
         Unipolar[] electrodes = electrodeDB.getElectrodeArray();
         //Create charts + Add charts to panel
         JFreeChart[] charts = new JFreeChart[numRows * numCol];
 
+        //Filling charts with information and functionality
         for(int i=0; i<(numRows*numCol); i++){
 
-            XYDataset dataset = createDataset(electrodes[i].getData());
-            charts[i] = createChart(dataset, electrodes[i].getName());
-            ChartPanel chartPanel = new ChartPanel(charts[i]);
+            XYDataset dataset = createDataset(electrodes[i].getData()); //creates dataset of single electrode
+            charts[i] = createChart(dataset, electrodes[i].getName(), electrodes,numRows,numCol); //creates chart element
+            ChartPanel chartPanel = new ChartPanel(charts[i]); //creates new chart panel
+            //setting layout of chart panel
             chartPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-            chartPanel.setPreferredSize(new Dimension(120,100));
-            chartPanel.setMouseWheelEnabled(true);
+            chartPanel.setPreferredSize(new Dimension(200,130));
+            chartPanel.setMouseWheelEnabled(true);//enables to zoom with mousewheel
             chartPanel.setBackground(Color.white);
-            //Rearrange panels
+            //adding buttons to restore axis
+            chartPanel.add(CreateZoom(chartPanel,electrodes,numRows,numCol,charts[i]));
+            //Add chart panels to control panel
             controlPanel.add(chartPanel);
         }
-        add(scrollPane);
+        add(scrollPane);// adds control panel(with scroll pane) to single panel
     }
 
     private void setDimensions(){
@@ -96,7 +109,7 @@ public class SinglePanel extends JPanel {
     }
     private XYDataset createDataset(Double[] electrode){
         XYSeriesCollection dataset=new XYSeriesCollection();
-        XYSeries series=new XYSeries("Object 1");
+        XYSeries series=new XYSeries("");
 
         for(double i=0; i < electrode.length; i++) {
             series.add(i,electrode[(int) i]);
@@ -105,10 +118,10 @@ public class SinglePanel extends JPanel {
 
         return dataset;
     }
-    private JFreeChart createChart(XYDataset dataset, String title) {
+    private JFreeChart createChart(XYDataset dataset, String title, Unipolar[] electrodes, int numRows, int numCol) {
         JFreeChart chart = ChartFactory.createXYLineChart(
-                title,
                 null,
+                title,
                 null,
                 dataset,
                 PlotOrientation.VERTICAL,
@@ -133,14 +146,44 @@ public class SinglePanel extends JPanel {
 
         chart.getLegend().setFrame(BlockBorder.NONE);
 
-        chart.setTitle(new TextTitle(title,
-                        new Font("Calibri", java.awt.Font.BOLD, 18)
-                )
-        );
+        //setting equal all initial yAxis ranges for all electrodes
+        ValueAxis yAxis= plot.getRangeAxis();
+        yAxis.setRange(-getMaxValue(electrodes,numRows,numCol),getMaxValue(electrodes,numRows,numCol));
 
         return chart;
     }
 
+    private JButton CreateZoom (ChartPanel chartPanels, Unipolar[] electrodes,int numRows, int numCol, JFreeChart chart){
 
+        double finalMaxElement= getMaxValue(electrodes,numRows,numCol);
+        //creates button to restore axis after any zoom operation has been done
+        JButton autoZoom= new JButton(new AbstractAction("Restore Axis") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chartPanels.restoreAutoDomainBounds();
+                chart.getXYPlot().getRangeAxis().setRange(-finalMaxElement, finalMaxElement);
+
+
+            }
+        });
+
+        return autoZoom;
+    }
+
+    public double getMaxValue(Unipolar[] electrodes, int numRows, int numCol){
+        //calculating maximum absolute value among all the data
+        double maxElement=0;
+
+        for(int i=0; i<numCol*numRows;i++){
+            Double[] electrodeData= electrodes[i].getData();
+            for (int j = 0; j < electrodeData.length; j++) {
+                if(abs(electrodeData[j])>maxElement){
+                    maxElement = abs(electrodeData[j]);
+                }
+            }
+        }
+        double finalMaxElement = maxElement;
+        return finalMaxElement;
+    }
 }
 
