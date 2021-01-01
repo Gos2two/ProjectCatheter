@@ -20,7 +20,8 @@ public class ElectrodeDB {
             for(int j=0;j<Data.length;j++){
                 tempData[j] = Data[j][i];
             }
-            ElectrodeArray[i] = new Unipolar(names[i],tempData); }
+            ElectrodeArray[i] = new Unipolar(names[i],tempData);
+        }
     }
 
     public Unipolar[] getElectrodeArray(){

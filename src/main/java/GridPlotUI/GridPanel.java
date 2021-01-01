@@ -20,19 +20,18 @@ import java.awt.*;
 public class GridPanel extends JPanel {
     private int numRows;
     private int numCol;
-    private ElectrodeDB electrodeDB;
 
     public GridPanel(ElectrodeDB electrodeDB){
         //Set layout according to size of the grid: input from user dialogue.
         setGridDimensions();
         setLayout(new GridLayout(numRows,numCol));
         //Instantiate ElectrodeArray: data from user : Data Handling
-        this.electrodeDB = electrodeDB;
-        Unipolar[] electrodes = this.electrodeDB.getElectrodeArray();
+        Unipolar[] electrodes = electrodeDB.getElectrodeArray();
         //Create charts + Add charts to panel
         JFreeChart[] charts = new JFreeChart[numRows * numCol];
 
         for(int i=0; i<(numRows*numCol); i++){
+
             XYDataset dataset = createDataset(electrodes[i].getData());
             charts[i] = createChart(dataset, electrodes[i].getName());
             ChartPanel chartPanel = new ChartPanel(charts[i]);
@@ -86,7 +85,7 @@ public class GridPanel extends JPanel {
         XYSeriesCollection dataset=new XYSeriesCollection();
         XYSeries series=new XYSeries("Object 1");
 
-        for(double i=0; i<electrode.length; i++) {
+        for(double i=0; i < electrode.length; i++) {
             series.add(i,electrode[(int) i]);
         }
         dataset.addSeries(series);
