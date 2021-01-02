@@ -1,12 +1,14 @@
 package SinglePlotUI;
 
+import DataHandling.ElectrodeDB;
+
 import javax.swing.*;
 
 public class SinglePlotWindow extends JFrame {
-    public SinglePlotWindow(SinglePanel singlePanel){
+    public SinglePlotWindow(ElectrodeDB electrodeDB){
         setSize(1000,1000);
         // Add panel containing charts.
-        getContentPane().add(singlePanel);
+        getContentPane().add(new SinglePanel(electrodeDB));
 
         //This should be the last two statements so everything is visible and you can close the window.
 

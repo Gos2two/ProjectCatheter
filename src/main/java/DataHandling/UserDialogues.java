@@ -30,4 +30,45 @@ public class UserDialogues {
             setExcelFilePath(selectedFile.getAbsolutePath());
         }
     }
+    public int[] getGridDimensions(){
+        //Define temporal int[] to store grid dimensions
+        int[] gridDimensions = new int[2];
+        JTextField rowField = new JTextField(5);
+        JTextField colField = new JTextField(5);
+
+        //Setting up panel with text fields for the user to input values
+        JPanel myPanel = new JPanel();
+        myPanel.add(new JLabel("Number of rows:"));
+        myPanel.add(rowField);
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("Number of columns:"));
+        myPanel.add(colField);
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Please Enter Catheter Dimensions", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            System.out.println("Number of rows: " + rowField.getText());
+            try
+            {
+                // the String to int conversion happens here
+                 gridDimensions[0] = Integer.parseInt((rowField.getText()).trim());
+            }
+            catch (NumberFormatException nfe)
+            {
+                System.out.println("NumberFormatException: " + nfe.getMessage());
+            }
+            System.out.println("Number of columns: " + colField.getText());
+            try
+            {
+                // the String to int conversion happens here
+                gridDimensions[1] = Integer.parseInt((colField.getText()).trim());
+            }
+            catch (NumberFormatException nfe)
+            {
+                System.out.println("NumberFormatException: " + nfe.getMessage());
+            }
+
+        }
+        return gridDimensions;
+    }
 }

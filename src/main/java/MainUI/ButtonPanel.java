@@ -2,9 +2,7 @@ package MainUI;
 
 import DataHandling.ElectrodeDB;
 import DataHandling.UserDialogues;
-import GridPlotUI.GridPanel;
 import GridPlotUI.GridPlotWindow;
-import SinglePlotUI.SinglePanel;
 import SinglePlotUI.SinglePlotWindow;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -35,15 +33,13 @@ public class ButtonPanel extends JPanel {
         gridPlotB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GridPanel gridPanel = new GridPanel(ElectrodeDB);
-                GridPlotWindow gridPlotWindow = new GridPlotWindow(gridPanel);
+                GridPlotWindow gridPlotWindow = new GridPlotWindow(ElectrodeDB);
             }
         });
         singlePlotB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SinglePanel singlePanel = new SinglePanel(ElectrodeDB);
-                SinglePlotWindow singlePlotWindow = new SinglePlotWindow(singlePanel);
+                SinglePlotWindow singlePlotWindow = new SinglePlotWindow(ElectrodeDB);
             }
         });
         //Here we should add a new action performed: ask user for catheter size
