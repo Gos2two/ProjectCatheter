@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SinglePanel extends PlotPanel {
+
     protected JScrollPane scrollPane;
     protected JPanel controlPanel;
 

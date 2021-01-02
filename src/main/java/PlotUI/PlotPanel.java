@@ -1,6 +1,5 @@
 package PlotUI;
 
-import DataHandling.ElectrodeDB;
 import DataHandling.Unipolar;
 import DataHandling.UserDialogues;
 import org.jfree.chart.ChartFactory;
@@ -22,12 +21,16 @@ import java.awt.event.ActionEvent;
 import static java.lang.StrictMath.abs;
 
 public class PlotPanel extends JPanel {
+
     protected int numRows;
     protected int numCol;
 
     public PlotPanel(){ setDimensions(); }
 
+    //PROTECTED METHODS SHARED BY GRID AND SINGLE PANEL
+
     private void setDimensions(){
+
         //Define temporal variables
         UserDialogues userDialogues = new UserDialogues();
         int[] gridDimensions = new int[2];
@@ -37,7 +40,9 @@ public class PlotPanel extends JPanel {
         numRows = gridDimensions[0];
         numCol = gridDimensions[1];
     }
+
     protected XYDataset createDataset(Double[] electrode){
+
         XYSeriesCollection dataset=new XYSeriesCollection();
         XYSeries series=new XYSeries("");
 
@@ -48,7 +53,9 @@ public class PlotPanel extends JPanel {
 
         return dataset;
     }
+
     protected JFreeChart createChart(XYDataset dataset, String title, Unipolar[] electrodes, int numRows, int numCol) {
+
         JFreeChart chart = ChartFactory.createXYLineChart(
                 null,
                 title,
@@ -77,16 +84,17 @@ public class PlotPanel extends JPanel {
         chart.getLegend().setFrame(BlockBorder.NONE);
 
 
-        //Setting equal all initial yAxis ranges for all electrodes
+        //Set all yAxis equal initially
         ValueAxis yAxis= plot.getRangeAxis();
         yAxis.setRange(-getMaxValue(electrodes,numRows,numCol),getMaxValue(electrodes,numRows,numCol));
 
         return chart;
     }
+
     protected JButton CreateZoom(ChartPanel chartPanels, Unipolar[] electrodes, int numRows, int numCol, JFreeChart chart){
 
         double finalMaxElement= getMaxValue(electrodes,numRows,numCol);
-        //creates button to restore axis after any zoom operation has been done
+        //Create button to restore axis after zoom.
         JButton autoZoom= new JButton(new AbstractAction("Restore Axis") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -99,8 +107,10 @@ public class PlotPanel extends JPanel {
 
         return autoZoom;
     }
+
     protected double getMaxValue(Unipolar[] electrodes, int numRows, int numCol){
-        //calculating maximum absolute value among all the data
+
+        //Calculate max. abs. value amongst all data
         double maxElement=0;
 
         for(int i=0; i<numCol*numRows;i++){

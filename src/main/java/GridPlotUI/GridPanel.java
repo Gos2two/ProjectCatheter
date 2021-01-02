@@ -12,7 +12,6 @@ import java.awt.*;
 
 public class GridPanel extends PlotPanel {
 
-
     public GridPanel(ElectrodeDB electrodeDB){
 
         super(); //Initialize super class: gets catheter dimensions
