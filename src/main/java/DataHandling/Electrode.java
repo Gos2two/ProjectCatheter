@@ -1,8 +1,8 @@
-package DataHandeling;
+package DataHandling;
 
 public class Electrode {
     private String name;
-    private Double [] Data;
+    private Double[] Data;
 
     public Electrode(String name,Double[] Data){
         this.name = name;

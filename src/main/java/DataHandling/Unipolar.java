@@ -1,4 +1,4 @@
-package DataHandeling;
+package DataHandling;
 
 public class Unipolar extends Electrode {
     public Unipolar(String name,Double[] Data){

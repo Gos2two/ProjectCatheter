@@ -1,28 +1,27 @@
 package MainUI;
 
-import DataHandeling.ElectodeDB;
-import DataHandeling.ReadExcelFile;
-import DataHandeling.UserDialogues;
+import DataHandling.ElectrodeDB;
+import DataHandling.UserDialogues;
 import GridPlotUI.GridPlotWindow;
 import SinglePlotUI.SinglePlotWindow;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ButtonPanel extends JPanel {
-    protected JButton gridPlotB;
-    protected JButton singlePlotB;
-    protected JButton inputDataB;
-    protected UserDialogues userDialogues;
-    protected ElectodeDB ElectodeDB;
+    private JButton gridPlotB;
+    private JButton singlePlotB;
+    private JButton inputDataB;
+    private UserDialogues userDialogues;
+    private ElectrodeDB ElectrodeDB;
 
-    public ButtonPanel(){
+
+    public ButtonPanel() {
         //Define
-        gridPlotB=new JButton("GRID PLOT");
-        singlePlotB=new JButton("SINGLE PLOT");
-        inputDataB=new JButton("INPUT DATA");
-        userDialogues=new UserDialogues();
+        gridPlotB = new JButton("GRID PLOT");
+        singlePlotB = new JButton("SINGLE PLOT");
+        inputDataB = new JButton("INPUT DATA");
+        userDialogues = new UserDialogues();
 
 
         //Add
@@ -34,21 +33,22 @@ public class ButtonPanel extends JPanel {
         gridPlotB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GridPlotWindow plotWindow1=new GridPlotWindow();
+                GridPlotWindow gridPlotWindow = new GridPlotWindow(ElectrodeDB);
             }
         });
         singlePlotB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SinglePlotWindow plotWindow2=new SinglePlotWindow();
+                SinglePlotWindow singlePlotWindow = new SinglePlotWindow(ElectrodeDB);
             }
         });
+        //Here we should add a new action performed: ask user for catheter size
         inputDataB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 userDialogues.getFileSource();
-                ElectodeDB =  new ElectodeDB(userDialogues.getExcelFilePath());
-                ElectodeDB.printElectodes();
+                ElectrodeDB =  new ElectrodeDB(userDialogues.getExcelFilePath());
+                ElectrodeDB.printElectrodes();
             }
         });
     }
