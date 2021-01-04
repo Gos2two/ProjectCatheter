@@ -91,17 +91,17 @@ public class PlotPanel extends JPanel {
         return chart;
     }
 
-    protected JButton CreateZoom(ChartPanel chartPanels, Unipolar[] electrodes, int numRows, int numCol, JFreeChart chart){
+    protected JButton restoreZoomB(ChartPanel[] chartPanels, Unipolar[] electrodes, int numRows, int numCol, JFreeChart[] charts){
 
         double finalMaxElement= getMaxValue(electrodes,numRows,numCol);
         //Create button to restore axis after zoom.
         JButton autoZoom= new JButton(new AbstractAction("Restore Axis") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                chartPanels.restoreAutoDomainBounds();
-                chart.getXYPlot().getRangeAxis().setRange(-finalMaxElement, finalMaxElement);
-
-
+                for(int i = 0; i < (numRows*numCol); i++){
+                    chartPanels[i].restoreAutoDomainBounds();
+                    charts[i].getXYPlot().getRangeAxis().setRange(-finalMaxElement, finalMaxElement);
+                }
             }
         });
 
@@ -113,7 +113,7 @@ public class PlotPanel extends JPanel {
         //Calculate max. abs. value amongst all data
         double maxElement=0;
 
-        for(int i=0; i<numCol*numRows;i++){
+        for(int i=0; i < (numCol*numRows); i++){
             Double[] electrodeData= electrodes[i].getData();
             for (int j = 0; j < electrodeData.length; j++) {
                 if(abs(electrodeData[j])>maxElement){
