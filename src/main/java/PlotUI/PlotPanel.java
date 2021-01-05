@@ -108,6 +108,22 @@ public class PlotPanel extends JPanel {
         return autoZoom;
     }
 
+    protected JButton zoomAllB(ChartPanel[] chartPanels, int numRows, int numCol,JFreeChart[] charts){
+
+        //Create button to zoom all axis.
+        JButton zoomAll= new JButton(new AbstractAction("    Zoom all    ") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for(int i = 1; i < (numRows*numCol); i++){
+                    charts[i].getXYPlot().setRangeAxis(charts[0].getXYPlot().getRangeAxis());
+                    charts[i].getXYPlot().setDomainAxis(charts[0].getXYPlot().getDomainAxis());
+                }
+            }
+        });
+
+        return zoomAll;
+    }
+
     protected double getMaxValue(Unipolar[] electrodes, int numRows, int numCol){
 
         //Calculate max. abs. value amongst all data
