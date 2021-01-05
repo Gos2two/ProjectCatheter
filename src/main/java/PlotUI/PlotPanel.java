@@ -2,14 +2,19 @@ package PlotUI;
 
 import DataHandling.Unipolar;
 import DataHandling.UserDialogues;
+import org.apache.xmlbeans.impl.xb.xsdschema.BlockSet;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.AxisState;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.SamplingXYLineRenderer;
+import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -17,6 +22,11 @@ import org.jfree.data.xy.XYSeriesCollection;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.StrictMath.abs;
 
@@ -108,18 +118,46 @@ public class PlotPanel extends JPanel {
         return autoZoom;
     }
 
-    protected JButton zoomAllB(ChartPanel[] chartPanels, int numRows, int numCol,JFreeChart[] charts){
+    protected JToggleButton zoomAllB(ChartPanel[] chartPanels, int numRows, int numCol,JFreeChart[] charts){
 
         //Create button to zoom all axis.
-        JButton zoomAll= new JButton(new AbstractAction("    Zoom all    ") {
+        JToggleButton zoomAll= new JToggleButton("Zoom All");
+
+        ValueAxis[] range = new ValueAxis[numRows * numCol];
+        ValueAxis[] domain = new ValueAxis[numRows * numCol];
+
+
+        for (int i = 0; i < (numRows * numCol); i++) {
+            range[i] = charts[i].getXYPlot().getRangeAxis();
+            domain[i] = charts[i].getXYPlot().getDomainAxis();
+        }
+
+        ItemListener itemListener = new ItemListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                for(int i = 1; i < (numRows*numCol); i++){
-                    charts[i].getXYPlot().setRangeAxis(charts[0].getXYPlot().getRangeAxis());
-                    charts[i].getXYPlot().setDomainAxis(charts[0].getXYPlot().getDomainAxis());
+            public void itemStateChanged(ItemEvent e) {
+                int state = e.getStateChange();
+
+                if(state == e.SELECTED) {
+                    for (int i = 0; i < (numRows * numCol); i++) {
+                        range[i].setRange(range[numRows*numCol - i -1].getRange());
+                        domain[i].setRange(domain[numRows*numCol - i -1].getRange());
+                        charts[i].getXYPlot().setRangeAxis(range[0]);
+                        charts[i].getXYPlot().setDomainAxis(domain[0]);
+                    }
+                    zoomAll.setText("Zoom All:On");
+                }
+                else {
+                    for (int i = 0; i < (numRows * numCol); i++) {
+                        range[i].setRange(range[0].getRange());
+                        domain[i].setRange(domain[0].getRange());
+                        charts[i].getXYPlot().setRangeAxis(range[i]);
+                        charts[i].getXYPlot().setDomainAxis(domain[i]);
+                    }
+                    zoomAll.setText("Zoom All:Off");
                 }
             }
-        });
+        };
+        zoomAll.addItemListener(itemListener);
 
         return zoomAll;
     }
