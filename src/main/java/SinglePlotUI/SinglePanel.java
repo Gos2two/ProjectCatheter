@@ -47,6 +47,7 @@ public class SinglePanel extends PlotPanel {
             chartPanel.setMouseWheelEnabled(true);//Enables to zoom with mousewheel
             chartPanel.setBackground(Color.white);
             chartPanel.add(CreateZoom(chartPanel, electrodes, numRows, numCol, charts[i]));//Add buttons to restore axis
+            chartPanel.addChartMouseListener(CreateMouseListener(chartPanel,electrodes,numRows,numCol,charts));
 
             //Add chart panels to control panel
             controlPanel.add(chartPanel);
