@@ -2,15 +2,13 @@ package PlotUI;
 
 import DataHandling.Unipolar;
 import DataHandling.UserDialogues;
+import org.jfree.chart.*;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.ui.LengthAdjustmentType;
 import org.jfree.chart.ui.RectangleAnchor;
 import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.chart.ui.TextAnchor;
 import org.apache.xmlbeans.impl.xb.xsdschema.BlockSet;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.AxisState;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
@@ -121,7 +119,7 @@ public class PlotPanel extends JPanel {
         return autoZoom;
     }
   
-    protected ChartMouseListener CreateMouseListener(ChartPanel[] chartPanels, Unipolar[] electrodes, int numRows, int numCol, JFreeChart[] charts) {
+    protected ChartMouseListener CreateMouseListener(ChartPanel chartPanel, Unipolar[] electrodes, int numRows, int numCol, JFreeChart[] charts) {
         ChartMouseListener customlistener = new ChartMouseListener(){
         @Override
         public void chartMouseClicked (ChartMouseEvent cme){

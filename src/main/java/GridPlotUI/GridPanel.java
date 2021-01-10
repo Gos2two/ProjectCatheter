@@ -3,19 +3,8 @@ package GridPlotUI;
 import DataHandling.ElectrodeDB;
 import DataHandling.Unipolar;
 import PlotUI.PlotPanel;
-import org.jfree.chart.ChartMouseEvent;
-import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.plot.Crosshair;
-import org.jfree.chart.plot.Marker;
-import org.jfree.chart.plot.ValueMarker;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.ui.LengthAdjustmentType;
-import org.jfree.chart.ui.RectangleAnchor;
-import org.jfree.chart.ui.RectangleEdge;
-import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.xy.XYDataset;
 
 import javax.swing.*;
@@ -47,7 +36,7 @@ public class GridPanel extends PlotPanel {
             chartPanels[i] = new ChartPanel(charts[i]);//Create new chart panel
 
             //Set layout of chart panel
-            chartPanels[i].addChartMouseListener(CreateMouseListener(chartPanel,electrodes,numRows,numCol,charts));
+            chartPanels[i].addChartMouseListener(CreateMouseListener(chartPanels[i],electrodes,numRows,numCol,charts));
             chartPanels[i].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             chartPanels[i].setBackground(Color.white);
             chartPanels[i].setMouseWheelEnabled(true); //Enable to zoom with mousewheel
