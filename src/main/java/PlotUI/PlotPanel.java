@@ -2,21 +2,15 @@ package PlotUI;
 
 import DataHandling.Unipolar;
 import DataHandling.UserDialogues;
+import org.jfree.chart.*;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.ui.LengthAdjustmentType;
 import org.jfree.chart.ui.RectangleAnchor;
 import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.chart.ui.TextAnchor;
-import org.apache.xmlbeans.impl.xb.xsdschema.BlockSet;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.AxisState;
-import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.SamplingXYLineRenderer;
 import org.jfree.data.xy.XYDataset;
@@ -27,9 +21,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.List;
 
 import static java.lang.StrictMath.abs;
 
@@ -46,10 +37,9 @@ public class PlotPanel extends JPanel {
 
         //Define temporal variables
         UserDialogues userDialogues = new UserDialogues();
-        int[] gridDimensions = new int[2];
 
         //Call method from user dialogues to get dimensions
-        gridDimensions = userDialogues.getGridDimensions();
+        int[] gridDimensions = userDialogues.getGridDimensions();
         numRows = gridDimensions[0];
         numCol = gridDimensions[1];
     }
@@ -108,7 +98,8 @@ public class PlotPanel extends JPanel {
 
         double finalMaxElement= getMaxValue(electrodes,numRows,numCol);
         //Create button to restore axis after zoom.
-        JButton autoZoom= new JButton(new AbstractAction("Restore Axis") {
+
+        return new JButton(new AbstractAction("Restore Axis") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 for(int i = 0; i < (numRows*numCol); i++){
@@ -117,14 +108,29 @@ public class PlotPanel extends JPanel {
                 }
             }
         });
+    }
 
-        return autoZoom;
+    protected JButton clearMarkers(ChartPanel[] chartPanels, Unipolar[] electrodes, JFreeChart[] charts){
+        //Create button to remove markers.
+
+        return new JButton(new AbstractAction("Clear Markers") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for(int i = 0; i < (numRows*numCol); i++){
+                    XYPlot scopeXYPlot = charts[i].getXYPlot();
+                    scopeXYPlot.clearDomainMarkers();
+                    scopeXYPlot.setRangeCrosshairVisible(false);
+                }
+            }
+        });
     }
   
-    protected ChartMouseListener CreateMouseListener(ChartPanel[] chartPanels, Unipolar[] electrodes, int numRows, int numCol, JFreeChart[] charts) {
-        ChartMouseListener customlistener = new ChartMouseListener(){
+    protected ChartMouseListener CreateMouseListener(ChartPanel chartPanel, Unipolar[] electrodes, int numRows, int numCol, JFreeChart[] charts) {
+        return new ChartMouseListener(){
         @Override
         public void chartMouseClicked (ChartMouseEvent cme){
+
+            try {
 
             XYPlot plot = chartPanel.getChart().getXYPlot();
 
@@ -150,19 +156,28 @@ public class PlotPanel extends JPanel {
                 markerx.setLabelPaint(Color.black);
                 markerx.setLabelAnchor(RectangleAnchor.TOP_RIGHT);
                 markerx.setLabelTextAnchor(TextAnchor.TOP_LEFT);
-                markerx.setLabelFont(new Font("Arial", Font.PLAIN, 9));
+                markerx.setLabelFont(new Font("Arial", Font.PLAIN, 10));
                 markerx.setStroke(new BasicStroke(2.0f));
                 scopeXYPlot.addDomainMarker(markerx);
+            }
 
 
+            }
+            catch(Exception e) {
+                for (int j = 0; j < (numRows * numCol); j++) {
+
+                    XYPlot scopeXYPlot = charts[j].getXYPlot();
+                    scopeXYPlot.clearDomainMarkers();
+                    scopeXYPlot.setRangeCrosshairVisible(false);
+                }
             }
 
         }
         @Override
         public void chartMouseMoved (ChartMouseEvent cme){
+
         }
         };
-        return customlistener;
     }
   
     protected JToggleButton zoomAllB(ChartPanel[] chartPanels, int numRows, int numCol,JFreeChart[] charts){
@@ -179,29 +194,26 @@ public class PlotPanel extends JPanel {
             domain[i] = charts[i].getXYPlot().getDomainAxis();
         }
 
-        ItemListener itemListener = new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                int state = e.getStateChange();
+        ItemListener itemListener = e -> {
+            int state = e.getStateChange();
 
-                if(state == e.SELECTED) {
-                    for (int i = 0; i < (numRows * numCol); i++) {
-                        range[i].setRange(range[numRows*numCol - i -1].getRange());
-                        domain[i].setRange(domain[numRows*numCol - i -1].getRange());
-                        charts[i].getXYPlot().setRangeAxis(range[0]);
-                        charts[i].getXYPlot().setDomainAxis(domain[0]);
-                    }
-                    zoomAll.setText("Zoom All:On");
+            if(state == ItemEvent.SELECTED) {
+                for (int i = 0; i < (numRows * numCol); i++) {
+                    range[i].setRange(range[numRows*numCol - i -1].getRange());
+                    domain[i].setRange(domain[numRows*numCol - i -1].getRange());
+                    charts[i].getXYPlot().setRangeAxis(range[0]);
+                    charts[i].getXYPlot().setDomainAxis(domain[0]);
                 }
-                else {
-                    for (int i = 0; i < (numRows * numCol); i++) {
-                        range[i].setRange(range[0].getRange());
-                        domain[i].setRange(domain[0].getRange());
-                        charts[i].getXYPlot().setRangeAxis(range[i]);
-                        charts[i].getXYPlot().setDomainAxis(domain[i]);
-                    }
-                    zoomAll.setText("Zoom All:Off");
+                zoomAll.setText("Zoom All:On");
+            }
+            else {
+                for (int i = 0; i < (numRows * numCol); i++) {
+                    range[i].setRange(range[0].getRange());
+                    domain[i].setRange(domain[0].getRange());
+                    charts[i].getXYPlot().setRangeAxis(range[i]);
+                    charts[i].getXYPlot().setDomainAxis(domain[i]);
                 }
+                zoomAll.setText("Zoom All:Off");
             }
         };
         zoomAll.addItemListener(itemListener);
@@ -216,14 +228,13 @@ public class PlotPanel extends JPanel {
 
         for(int i=0; i < (numCol*numRows); i++){
             Double[] electrodeData= electrodes[i].getData();
-            for (int j = 0; j < electrodeData.length; j++) {
-                if(abs(electrodeData[j])>maxElement){
-                    maxElement = abs(electrodeData[j]);
+            for (Double electrodeDatum : electrodeData) {
+                if (abs(electrodeDatum) > maxElement) {
+                    maxElement = abs(electrodeDatum);
                 }
             }
         }
-        double finalMaxElement = maxElement;
-        return finalMaxElement;
+        return maxElement;
     }
 }
 

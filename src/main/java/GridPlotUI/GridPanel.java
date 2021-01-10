@@ -47,7 +47,7 @@ public class GridPanel extends PlotPanel {
             chartPanels[i] = new ChartPanel(charts[i]);//Create new chart panel
 
             //Set layout of chart panel
-            chartPanels[i].addChartMouseListener(CreateMouseListener(chartPanel,electrodes,numRows,numCol,charts));
+            chartPanels[i].addChartMouseListener(CreateMouseListener(chartPanels[i],electrodes,numRows,numCol,charts));
             chartPanels[i].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             chartPanels[i].setBackground(Color.white);
             chartPanels[i].setMouseWheelEnabled(true); //Enable to zoom with mousewheel
@@ -56,6 +56,7 @@ public class GridPanel extends PlotPanel {
             gridChartPanel.add(chartPanels[i]);
         }
         toolBar.add(restoreZoomB(chartPanels,electrodes,numRows,numCol,charts));//Add button to restore axis
+        toolBar.add(clearMarkers(chartPanels,electrodes,charts));//Add a button to clear markers
         toolBar.add(zoomAllB(chartPanels,numRows,numCol,charts));//Add button to zoom all charts
         add(toolBar, BorderLayout.PAGE_START);//Add tool bar
         add(gridChartPanel);
