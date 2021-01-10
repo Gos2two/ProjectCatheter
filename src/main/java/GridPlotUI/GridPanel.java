@@ -45,6 +45,7 @@ public class GridPanel extends PlotPanel {
             gridChartPanel.add(chartPanels[i]);
         }
         toolBar.add(restoreZoomB(chartPanels,electrodes,numRows,numCol,charts));//Add button to restore axis
+        toolBar.add(clearMarkers(chartPanels,electrodes,charts));//Add a button to clear markers
         toolBar.add(zoomAllB(chartPanels,numRows,numCol,charts));//Add button to zoom all charts
         add(toolBar, BorderLayout.PAGE_START);//Add tool bar
         add(gridChartPanel);
