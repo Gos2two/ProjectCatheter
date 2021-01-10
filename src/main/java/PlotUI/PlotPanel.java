@@ -2,6 +2,11 @@ package PlotUI;
 
 import DataHandling.Unipolar;
 import DataHandling.UserDialogues;
+import org.jfree.chart.plot.ValueMarker;
+import org.jfree.chart.ui.LengthAdjustmentType;
+import org.jfree.chart.ui.RectangleAnchor;
+import org.jfree.chart.ui.RectangleEdge;
+import org.jfree.chart.ui.TextAnchor;
 import org.apache.xmlbeans.impl.xb.xsdschema.BlockSet;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -14,11 +19,9 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.SamplingXYLineRenderer;
-import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -117,7 +120,51 @@ public class PlotPanel extends JPanel {
 
         return autoZoom;
     }
+  
+    protected ChartMouseListener CreateMouseListener(ChartPanel[] chartPanels, Unipolar[] electrodes, int numRows, int numCol, JFreeChart[] charts) {
+        ChartMouseListener customlistener = new ChartMouseListener(){
+        @Override
+        public void chartMouseClicked (ChartMouseEvent cme){
 
+            XYPlot plot = chartPanel.getChart().getXYPlot();
+
+            double xx = plot.getDomainAxis().java2DToValue(cme.getTrigger().getX(), chartPanel.getScreenDataArea(), RectangleEdge.BOTTOM);
+
+            for (int j = 0; j < (numRows * numCol); j++) {
+
+                XYPlot scopeXYPlot = charts[j].getXYPlot();
+
+                scopeXYPlot.clearRangeMarkers();
+                scopeXYPlot.clearDomainMarkers();
+
+                double yy = (double) createDataset(electrodes[j].getData()).getY(0, (int) xx);
+                // make sure the range crosshair is on
+                scopeXYPlot.setRangeCrosshairVisible(true);
+                // and plot it
+                scopeXYPlot.setRangeCrosshairValue(yy, true);
+
+                ValueMarker markerx = new ValueMarker(xx);
+                markerx.setLabelOffsetType(LengthAdjustmentType.EXPAND);
+                markerx.setPaint(Color.black);
+                markerx.setLabel(String.format("X: %-1.3f Y: %-1.3f", xx, yy));
+                markerx.setLabelPaint(Color.black);
+                markerx.setLabelAnchor(RectangleAnchor.TOP_RIGHT);
+                markerx.setLabelTextAnchor(TextAnchor.TOP_LEFT);
+                markerx.setLabelFont(new Font("Arial", Font.PLAIN, 9));
+                markerx.setStroke(new BasicStroke(2.0f));
+                scopeXYPlot.addDomainMarker(markerx);
+
+
+            }
+
+        }
+        @Override
+        public void chartMouseMoved (ChartMouseEvent cme){
+        }
+        };
+        return customlistener;
+    }
+  
     protected JToggleButton zoomAllB(ChartPanel[] chartPanels, int numRows, int numCol,JFreeChart[] charts){
 
         //Create button to zoom all axis.

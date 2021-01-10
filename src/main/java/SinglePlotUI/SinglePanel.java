@@ -44,6 +44,8 @@ public class SinglePanel extends PlotPanel {
             chartPanels[i] = new ChartPanel(charts[i]); //Create new chart panel
 
             //Set layout of chart panel
+          
+            chartPanels[i].addChartMouseListener(CreateMouseListener(chartPanel,electrodes,numRows,numCol,charts));
             chartPanels[i].setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
             chartPanels[i].setPreferredSize(new Dimension(200, 130));
             chartPanels[i].setMouseWheelEnabled(true);//Enables to zoom with mousewheel
@@ -52,6 +54,7 @@ public class SinglePanel extends PlotPanel {
             //Add chart panels to control panel
             controlPanel.add(chartPanels[i]);
         }
+      
         toolBar.add(restoreZoomB(chartPanels,electrodes,numRows,numCol,charts));//Add button to restore axis
         toolBar.add(zoomAllB(chartPanels,numRows,numCol,charts));//Add button to zoom all charts
         add(toolBar, BorderLayout.PAGE_START);//Add tool bar
