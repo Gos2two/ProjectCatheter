@@ -30,9 +30,9 @@ public class ElectrodeDB {
     }
 
     public void printElectrodes(){
-        for(int i=0;i<ElectrodeArray.length;i++){
-            System.out.println(ElectrodeArray[i].getName());
-            System.out.println(ElectrodeArray[i].getData().length);
+        for (Unipolar unipolar : ElectrodeArray) {
+            System.out.println(unipolar.getName());
+            System.out.println(unipolar.getData().length);
         }
     }
 }
