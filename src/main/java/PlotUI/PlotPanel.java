@@ -126,6 +126,7 @@ public class PlotPanel extends JPanel {
     }
   
     protected ChartMouseListener CreateMouseListener(ChartPanel chartPanel, Unipolar[] electrodes, int numRows, int numCol, JFreeChart[] charts) {
+      
         return new ChartMouseListener(){
         @Override
         public void chartMouseClicked (ChartMouseEvent cme){
