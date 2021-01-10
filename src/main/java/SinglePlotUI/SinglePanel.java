@@ -56,8 +56,8 @@ public class SinglePanel extends PlotPanel {
         }
       
         toolBar.add(restoreZoomB(chartPanels,electrodes,numRows,numCol,charts));//Add button to restore axis
-        toolBar.add(clearMarkers(chartPanels,electrodes,charts));//Add a button to clear markers
-        toolBar.add(zoomAllB(chartPanels,numRows,numCol,charts));//Add button to zoom all charts
+        toolBar.add(clearMarkers(charts));//Add a button to clear markers
+        toolBar.add(zoomAllB(numRows,numCol,charts));//Add button to zoom all charts
         add(toolBar, BorderLayout.PAGE_START);//Add tool bar
         add(scrollPane);// Adds control panel (with scrollbar) to single panel
     }

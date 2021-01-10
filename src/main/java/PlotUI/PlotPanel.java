@@ -110,7 +110,7 @@ public class PlotPanel extends JPanel {
         });
     }
 
-    protected JButton clearMarkers(ChartPanel[] chartPanels, Unipolar[] electrodes, JFreeChart[] charts){
+    protected JButton clearMarkers( JFreeChart[] charts){
         //Create button to remove markers.
 
         return new JButton(new AbstractAction("Clear Markers") {
@@ -145,21 +145,21 @@ public class PlotPanel extends JPanel {
                 scopeXYPlot.clearDomainMarkers();
 
                 double yy = (double) createDataset(electrodes[j].getData()).getY(0, (int) xx);
-                // make sure the range crosshair is on
+                // Make sure the range cross-hair is on
                 scopeXYPlot.setRangeCrosshairVisible(true);
                 // and plot it
                 scopeXYPlot.setRangeCrosshairValue(yy, true);
 
-                ValueMarker markerx = new ValueMarker(xx);
-                markerx.setLabelOffsetType(LengthAdjustmentType.EXPAND);
-                markerx.setPaint(Color.black);
-                markerx.setLabel(String.format("X: %-1.3f Y: %-1.3f", xx, yy));
-                markerx.setLabelPaint(Color.black);
-                markerx.setLabelAnchor(RectangleAnchor.TOP_RIGHT);
-                markerx.setLabelTextAnchor(TextAnchor.TOP_LEFT);
-                markerx.setLabelFont(new Font("Arial", Font.PLAIN, 10));
-                markerx.setStroke(new BasicStroke(2.0f));
-                scopeXYPlot.addDomainMarker(markerx);
+                ValueMarker markerX = new ValueMarker(xx);
+                markerX.setLabelOffsetType(LengthAdjustmentType.EXPAND);
+                markerX.setPaint(Color.black);
+                markerX.setLabel(String.format("X: %-1.3f Y: %-1.3f", xx, yy));
+                markerX.setLabelPaint(Color.black);
+                markerX.setLabelAnchor(RectangleAnchor.TOP_RIGHT);
+                markerX.setLabelTextAnchor(TextAnchor.TOP_LEFT);
+                markerX.setLabelFont(new Font("Arial", Font.PLAIN, 10));
+                markerX.setStroke(new BasicStroke(2.0f));
+                scopeXYPlot.addDomainMarker(markerX);
             }
 
 
@@ -181,7 +181,7 @@ public class PlotPanel extends JPanel {
         };
     }
   
-    protected JToggleButton zoomAllB(ChartPanel[] chartPanels, int numRows, int numCol,JFreeChart[] charts){
+    protected JToggleButton zoomAllB(int numRows, int numCol,JFreeChart[] charts){
 
         //Create button to zoom all axis.
         JToggleButton zoomAll= new JToggleButton("Zoom All");
