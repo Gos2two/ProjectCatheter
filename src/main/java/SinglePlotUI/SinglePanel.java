@@ -23,7 +23,7 @@ public class SinglePanel extends PlotPanel {
         //DEFINITIONS
         controlPanel = new JPanel();
         scrollPane = new JScrollPane(controlPanel);//Create scrollbar that will act on controlPanel
-        Unipolar[] electrodes = electrodeDB.getElectrodeArray(); //Instantiate ElectrodeArray: data from user:Data Handling
+        Unipolar[] electrodes = electrodeDB.getUnipolarArray(); //Instantiate ElectrodeArray: data from user:Data Handling
         JFreeChart[] charts = new JFreeChart[numRows * numCol];//Create charts + Add charts to panel
 
         //SET PANEL LAYOUT

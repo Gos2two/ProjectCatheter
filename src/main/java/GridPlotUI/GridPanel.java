@@ -17,7 +17,7 @@ public class GridPanel extends PlotPanel {
         super(); //Initialize super class: gets catheter dimensions
 
         //DEFINITIONS
-        Unipolar[] electrodes = electrodeDB.getElectrodeArray(); //Instantiate ElectrodeArray: data from user:Data Handling
+        Unipolar[] electrodes = electrodeDB.getUnipolarArray(); //Instantiate ElectrodeArray: data from user:Data Handling
         JFreeChart[] charts = new JFreeChart[numRows * numCol];//Create charts + Add charts to panel
 
         //SET PANEL LAYOUT
