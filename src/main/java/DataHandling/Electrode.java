@@ -13,7 +13,11 @@ public class Electrode {
         return name;
     }
 
+    public void setName(String name) {this.name = name;}
+
     public Double[] getData(){
         return Data;
     }
+
+    public void setData(Double[] Data){this.Data = Data;}
 }

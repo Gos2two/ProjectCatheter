@@ -7,23 +7,24 @@ import SinglePlotUI.SinglePlotWindow;
 import javax.swing.*;
 import java.awt.*;
 
-public class ButtonPanel extends JPanel {
-    private UserDialogues userDialogues;
+
+public class ButtonPanel extends JPanel implements UserDialogues {
+  
     private ElectrodeDB ElectrodeDB;
-
-
+  
     public ButtonPanel() {
         JPanel dataPanel= new JPanel();
         JPanel graphPanel= new JPanel();
-        //setLayouts
+      
+        //SetLayouts
         setLayout(new GridLayout(2,1));
         dataPanel.setLayout(new FlowLayout());
         graphPanel.setLayout(new FlowLayout(1,60,0));
+      
         //Define
         JButton gridPlotB = new JButton("GRID PLOT");
         JButton singlePlotB = new JButton("SINGLE PLOT");
         JButton inputDataB = new JButton("INPUT DATA");
-        userDialogues = new UserDialogues();
 
         //Add
         dataPanel.add(inputDataB);
@@ -32,16 +33,17 @@ public class ButtonPanel extends JPanel {
         add(dataPanel);
         add(graphPanel);
 
-        //Define functions of buttons through action listeners.
-        
+        //Define functions of buttons through action listeners      
         gridPlotB.addActionListener(e -> new GridPlotWindow(ElectrodeDB));
 
         singlePlotB.addActionListener(e -> new SinglePlotWindow(ElectrodeDB));
 
         inputDataB.addActionListener(e -> {
-            userDialogues.getFileSource();
-            ElectrodeDB =  new ElectrodeDB(userDialogues.getExcelFilePath());
-            ElectrodeDB.printElectrodes();
+            String source = UserDialogues.getFileSource();
+                if(UserDialogues.extensionCheck(source)){
+                    ElectrodeDB =  new ElectrodeDB(source);
+                    ElectrodeDB.printElectrodes();
+                }
         });
     }
 }

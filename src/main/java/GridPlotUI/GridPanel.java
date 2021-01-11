@@ -18,7 +18,6 @@ public class GridPanel extends PlotPanel {
 
         //DEFINITIONS
         JPanel gridChartPanel = new JPanel();
-
         Unipolar[] electrodes = electrodeDB.getElectrodeArray(); //Instantiate ElectrodeArray: data from user:Data Handling
         JFreeChart[] charts = new JFreeChart[numRows * numCol];//Create charts
         ChartPanel[] chartPanels = new ChartPanel[numRows * numCol];//Create chart panels
