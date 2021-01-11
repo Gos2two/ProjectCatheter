@@ -60,8 +60,8 @@ public class PlotPanel extends JPanel {
     protected JFreeChart createChart(XYDataset dataset, String title, Unipolar[] electrodes, int numRows, int numCol) {
 
         JFreeChart chart = ChartFactory.createXYLineChart(
-                null,
                 title,
+                null,
                 null,
                 dataset,
                 PlotOrientation.VERTICAL,
