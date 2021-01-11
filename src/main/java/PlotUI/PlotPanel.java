@@ -1,5 +1,6 @@
 package PlotUI;
 
+import DataHandling.ElectrodeDB;
 import DataHandling.Unipolar;
 import DataHandling.UserDialogues;
 import org.jfree.chart.*;
@@ -29,20 +30,13 @@ public class PlotPanel extends JPanel {
     protected int numRows;
     protected int numCol;
 
-    public PlotPanel(){ setDimensions(); }
+    public PlotPanel(ElectrodeDB electrodeDB){ setDimensions(electrodeDB); }
 
     //PROTECTED METHODS SHARED BY GRID AND SINGLE PANEL
 
-    private void setDimensions(){
-
-        //Define temporal variables
-        int[] gridDimensions = new int[2];
-
-        //Call method from user dialogues to get dimensions
-        gridDimensions = UserDialogues.getGridDimensions();
-      
-        numRows = gridDimensions[0];
-        numCol = gridDimensions[1];
+    private void setDimensions(ElectrodeDB electrodeDB){
+        numRows = electrodeDB.getNumRows();
+        numCol = electrodeDB.getNumCols();
     }
 
     protected XYDataset createDataset(Double[] electrode){

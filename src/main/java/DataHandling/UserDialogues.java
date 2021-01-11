@@ -1,6 +1,5 @@
 package DataHandling;
 
-import org.apache.commons.compress.compressors.FileNameUtil;
 import org.apache.commons.io.FilenameUtils;
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +9,7 @@ public interface UserDialogues {
 
     static String getFileSource() {
         //Define String
-        String excelFilePath = new String();
+        String excelFilePath = "";
 
         //Frame and Panel for the Dialog Window.
         JFrame frame = new JFrame();
@@ -41,7 +40,7 @@ public interface UserDialogues {
         if(!extension.equals("xlsx") && (!excelFilePath.equals("Cancel_option")) ){
             frame.setVisible(true);
             JOptionPane.showMessageDialog(frame,
-                    "Wrong file format.Please select an excel file with .xlsx extention.",
+                    "Wrong file format.Please select an excel file with .xlsx extension.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
             return false;

@@ -6,7 +6,7 @@ public class Bipolar extends Electrode {
         super("",null);
 
         //Calculate Difference
-        Double Data[] = new Double[Active.getData().length];
+        Double[] Data = new Double[Active.getData().length];
         for(int i=0;i<Active.getData().length;i++) {
             Data[i] = Active.getData()[i] - Reference.getData()[i];
         }

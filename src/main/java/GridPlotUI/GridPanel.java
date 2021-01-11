@@ -14,11 +14,11 @@ public class GridPanel extends PlotPanel {
 
     public GridPanel(ElectrodeDB electrodeDB){
 
-        super(); //Initialize super class: gets catheter dimensions
+        super(electrodeDB); //Initialize super class: gets catheter dimensions
 
         //DEFINITIONS
         JPanel gridChartPanel = new JPanel();
-        Unipolar[] electrodes = electrodeDB.getElectrodeArray(); //Instantiate ElectrodeArray: data from user:Data Handling
+        Unipolar[] electrodes = electrodeDB.getUnipolarArray(); //Instantiate ElectrodeArray: data from user:Data Handling
         JFreeChart[] charts = new JFreeChart[numRows * numCol];//Create charts
         ChartPanel[] chartPanels = new ChartPanel[numRows * numCol];//Create chart panels
         JToolBar toolBar = new JToolBar("Still draggable");
