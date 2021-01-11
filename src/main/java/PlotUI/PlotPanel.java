@@ -2,9 +2,12 @@ package PlotUI;
 
 import DataHandling.Unipolar;
 import DataHandling.UserDialogues;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
+import org.jfree.chart.*;
+import org.jfree.chart.plot.ValueMarker;
+import org.jfree.chart.ui.LengthAdjustmentType;
+import org.jfree.chart.ui.RectangleAnchor;
+import org.jfree.chart.ui.RectangleEdge;
+import org.jfree.chart.ui.TextAnchor;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.PlotOrientation;
@@ -13,10 +16,11 @@ import org.jfree.chart.renderer.xy.SamplingXYLineRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import static java.lang.StrictMath.abs;
 
@@ -33,10 +37,9 @@ public class PlotPanel extends JPanel {
 
         //Define temporal variables
         UserDialogues userDialogues = new UserDialogues();
-        int[] gridDimensions = new int[2];
 
         //Call method from user dialogues to get dimensions
-        gridDimensions = userDialogues.getGridDimensions();
+        int[] gridDimensions = userDialogues.getGridDimensions();
         numRows = gridDimensions[0];
         numCol = gridDimensions[1];
     }
@@ -57,8 +60,8 @@ public class PlotPanel extends JPanel {
     protected JFreeChart createChart(XYDataset dataset, String title, Unipolar[] electrodes, int numRows, int numCol) {
 
         JFreeChart chart = ChartFactory.createXYLineChart(
-                null,
                 title,
+                null,
                 null,
                 dataset,
                 PlotOrientation.VERTICAL,
@@ -91,21 +94,132 @@ public class PlotPanel extends JPanel {
         return chart;
     }
 
-    protected JButton CreateZoom(ChartPanel chartPanels, Unipolar[] electrodes, int numRows, int numCol, JFreeChart chart){
+    protected JButton restoreZoomB(ChartPanel[] chartPanels, Unipolar[] electrodes, int numRows, int numCol, JFreeChart[] charts){
 
         double finalMaxElement= getMaxValue(electrodes,numRows,numCol);
         //Create button to restore axis after zoom.
-        JButton autoZoom= new JButton(new AbstractAction("Restore Axis") {
+
+        return new JButton(new AbstractAction("Restore Axis") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                chartPanels.restoreAutoDomainBounds();
-                chart.getXYPlot().getRangeAxis().setRange(-finalMaxElement, finalMaxElement);
+                for(int i = 0; i < (numRows*numCol); i++){
+                    chartPanels[i].restoreAutoDomainBounds();
+                    charts[i].getXYPlot().getRangeAxis().setRange(-finalMaxElement, finalMaxElement);
+                }
+            }
+        });
+    }
+
+    protected JButton clearMarkers( JFreeChart[] charts){
+        //Create button to remove markers.
+
+        return new JButton(new AbstractAction("Clear Markers") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for(int i = 0; i < (numRows*numCol); i++){
+                    XYPlot scopeXYPlot = charts[i].getXYPlot();
+                    scopeXYPlot.clearDomainMarkers();
+                    scopeXYPlot.setRangeCrosshairVisible(false);
+                }
+            }
+        });
+    }
+  
+    protected ChartMouseListener CreateMouseListener(ChartPanel chartPanel, Unipolar[] electrodes, int numRows, int numCol, JFreeChart[] charts) {
+      
+        return new ChartMouseListener(){
+        @Override
+        public void chartMouseClicked (ChartMouseEvent cme){
+
+            try {
+
+            XYPlot plot = chartPanel.getChart().getXYPlot();
+
+            double xx = plot.getDomainAxis().java2DToValue(cme.getTrigger().getX(), chartPanel.getScreenDataArea(), RectangleEdge.BOTTOM);
+
+            for (int j = 0; j < (numRows * numCol); j++) {
+
+                XYPlot scopeXYPlot = charts[j].getXYPlot();
+
+                scopeXYPlot.clearRangeMarkers();
+                scopeXYPlot.clearDomainMarkers();
+
+                double yy = (double) createDataset(electrodes[j].getData()).getY(0, (int) xx);
+                // Make sure the range cross-hair is on
+                scopeXYPlot.setRangeCrosshairVisible(true);
+                // and plot it
+                scopeXYPlot.setRangeCrosshairValue(yy, true);
+
+                ValueMarker markerX = new ValueMarker(xx);
+                markerX.setLabelOffsetType(LengthAdjustmentType.EXPAND);
+                markerX.setPaint(Color.black);
+                markerX.setLabel(String.format("X: %-1.3f Y: %-1.3f", xx, yy));
+                markerX.setLabelPaint(Color.black);
+                markerX.setLabelAnchor(RectangleAnchor.TOP_RIGHT);
+                markerX.setLabelTextAnchor(TextAnchor.TOP_LEFT);
+                markerX.setLabelFont(new Font("Arial", Font.PLAIN, 10));
+                markerX.setStroke(new BasicStroke(2.0f));
+                scopeXYPlot.addDomainMarker(markerX);
+            }
 
 
             }
-        });
+            catch(Exception e) {
+                for (int j = 0; j < (numRows * numCol); j++) {
 
-        return autoZoom;
+                    XYPlot scopeXYPlot = charts[j].getXYPlot();
+                    scopeXYPlot.clearDomainMarkers();
+                    scopeXYPlot.setRangeCrosshairVisible(false);
+                }
+            }
+
+        }
+        @Override
+        public void chartMouseMoved (ChartMouseEvent cme){
+
+        }
+        };
+    }
+  
+    protected JToggleButton zoomAllB(int numRows, int numCol,JFreeChart[] charts){
+
+        //Create button to zoom all axis.
+        JToggleButton zoomAll= new JToggleButton("Zoom All");
+
+        ValueAxis[] range = new ValueAxis[numRows * numCol];
+        ValueAxis[] domain = new ValueAxis[numRows * numCol];
+
+
+        for (int i = 0; i < (numRows * numCol); i++) {
+            range[i] = charts[i].getXYPlot().getRangeAxis();
+            domain[i] = charts[i].getXYPlot().getDomainAxis();
+        }
+
+        ItemListener itemListener = e -> {
+            int state = e.getStateChange();
+
+            if(state == ItemEvent.SELECTED) {
+                for (int i = 0; i < (numRows * numCol); i++) {
+                    range[i].setRange(range[numRows*numCol - i -1].getRange());
+                    domain[i].setRange(domain[numRows*numCol - i -1].getRange());
+                    charts[i].getXYPlot().setRangeAxis(range[0]);
+                    charts[i].getXYPlot().setDomainAxis(domain[0]);
+                }
+                zoomAll.setText("Zoom All:On");
+            }
+            else {
+                for (int i = 0; i < (numRows * numCol); i++) {
+                    range[i].setRange(range[0].getRange());
+                    domain[i].setRange(domain[0].getRange());
+                    charts[i].getXYPlot().setRangeAxis(range[i]);
+                    charts[i].getXYPlot().setDomainAxis(domain[i]);
+                }
+                zoomAll.setText("Zoom All:Off");
+            }
+        };
+        zoomAll.addItemListener(itemListener);
+
+        return zoomAll;
     }
 
     protected double getMaxValue(Unipolar[] electrodes, int numRows, int numCol){
@@ -113,16 +227,15 @@ public class PlotPanel extends JPanel {
         //Calculate max. abs. value amongst all data
         double maxElement=0;
 
-        for(int i=0; i<numCol*numRows;i++){
+        for(int i=0; i < (numCol*numRows); i++){
             Double[] electrodeData= electrodes[i].getData();
-            for (int j = 0; j < electrodeData.length; j++) {
-                if(abs(electrodeData[j])>maxElement){
-                    maxElement = abs(electrodeData[j]);
+            for (Double electrodeDatum : electrodeData) {
+                if (abs(electrodeDatum) > maxElement) {
+                    maxElement = abs(electrodeDatum);
                 }
             }
         }
-        double finalMaxElement = maxElement;
-        return finalMaxElement;
+        return maxElement;
     }
 }
 

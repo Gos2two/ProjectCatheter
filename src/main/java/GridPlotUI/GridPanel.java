@@ -17,28 +17,37 @@ public class GridPanel extends PlotPanel {
         super(); //Initialize super class: gets catheter dimensions
 
         //DEFINITIONS
+        JPanel gridChartPanel = new JPanel();
+
         Unipolar[] electrodes = electrodeDB.getElectrodeArray(); //Instantiate ElectrodeArray: data from user:Data Handling
-        JFreeChart[] charts = new JFreeChart[numRows * numCol];//Create charts + Add charts to panel
+        JFreeChart[] charts = new JFreeChart[numRows * numCol];//Create charts
+        ChartPanel[] chartPanels = new ChartPanel[numRows * numCol];//Create chart panels
+        JToolBar toolBar = new JToolBar("Still draggable");
 
         //SET PANEL LAYOUT
-        setLayout(new GridLayout(numRows,numCol));
+        setLayout(new BorderLayout());
+        gridChartPanel.setLayout(new GridLayout(numRows,numCol));
 
         //FILL CHARTS WITH DATA AND FUNCTIONALITY + ADD THEM TO GRID PANEL
         for(int i=0; i<(numRows*numCol); i++){
 
             XYDataset dataset = createDataset(electrodes[i].getData()); //Create dataset of single electrode
             charts[i] = createChart(dataset, electrodes[i].getName(),electrodes,numRows,numCol);//Create chart element
-            ChartPanel chartPanel = new ChartPanel(charts[i]);//Create new chart panel
+            chartPanels[i] = new ChartPanel(charts[i]);//Create new chart panel
 
             //Set layout of chart panel
-            chartPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            chartPanel.setBackground(Color.white);
-            chartPanel.setMouseWheelEnabled(true); //Enable to zoom with mousewheel
-            chartPanel.add(CreateZoom(chartPanel,electrodes,numRows,numCol,charts[i]));//Add buttons to restore axis
+            chartPanels[i].addChartMouseListener(CreateMouseListener(chartPanels[i],electrodes,numRows,numCol,charts));
+            chartPanels[i].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            chartPanels[i].setBackground(Color.white);
+            chartPanels[i].setMouseWheelEnabled(true); //Enable to zoom with mousewheel
 
             //Add chart panels to control panel
-            add(chartPanel);
+            gridChartPanel.add(chartPanels[i]);
         }
-
+        toolBar.add(restoreZoomB(chartPanels,electrodes,numRows,numCol,charts));//Add button to restore axis
+        toolBar.add(clearMarkers(charts));//Add a button to clear markers
+        toolBar.add(zoomAllB(numRows,numCol,charts));//Add button to zoom all charts
+        add(toolBar, BorderLayout.PAGE_START);//Add tool bar
+        add(gridChartPanel);
     }
 }
