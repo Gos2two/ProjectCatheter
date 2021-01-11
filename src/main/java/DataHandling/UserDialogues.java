@@ -25,24 +25,36 @@ public interface UserDialogues {
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
             excelFilePath = selectedFile.getAbsolutePath();
         }
+        else if(result == JFileChooser.CANCEL_OPTION){
+            excelFilePath = "Cancel_option";
+        }
         return excelFilePath;
     }
 
     static boolean extensionCheck(String excelFilePath){
         String extension = FilenameUtils.getExtension(excelFilePath);
 
-        if(!extension.equals("xlsx")){
-            JFrame frame = new JFrame();
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.setVisible(true);
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        if(!extension.equals("xlsx") && (!excelFilePath.equals("Cancel_option")) ){
+            frame.setVisible(true);
             JOptionPane.showMessageDialog(frame,
                     "Wrong file format.Please select an excel file with .xlsx extention.",
-                    "Inane error",
+                    "Error",
                     JOptionPane.ERROR_MESSAGE);
             return false;
         }
+        else if(excelFilePath.equals("Cancel_option")){
+            frame.setVisible(true);
+            JOptionPane.showMessageDialog(frame,
+                    "No file Selected",
+                    "Error",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
         else{
+            frame.setVisible(false);
             return true;
         }
     }
