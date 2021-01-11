@@ -1,7 +1,6 @@
 package GridPlotUI;
 
 import DataHandling.ElectrodeDB;
-import MainUI.MainPanel;
 
 import javax.swing.*;
 

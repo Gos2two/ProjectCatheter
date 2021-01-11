@@ -5,51 +5,45 @@ import DataHandling.UserDialogues;
 import GridPlotUI.GridPlotWindow;
 import SinglePlotUI.SinglePlotWindow;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 
-public class ButtonPanel extends JPanel implements UserDialogues  {
-    private JButton gridPlotB;
-    private JButton singlePlotB;
-    private JButton inputDataB;
+
+public class ButtonPanel extends JPanel implements UserDialogues {
+  
     private ElectrodeDB ElectrodeDB;
-
-
+  
     public ButtonPanel() {
+        JPanel dataPanel= new JPanel();
+        JPanel graphPanel= new JPanel();
+      
+        //SetLayouts
+        setLayout(new GridLayout(2,1));
+        dataPanel.setLayout(new FlowLayout());
+        graphPanel.setLayout(new FlowLayout(1,60,0));
+      
         //Define
-        gridPlotB = new JButton("GRID PLOT");
-        singlePlotB = new JButton("SINGLE PLOT");
-        inputDataB = new JButton("INPUT DATA");
-
+        JButton gridPlotB = new JButton("GRID PLOT");
+        JButton singlePlotB = new JButton("SINGLE PLOT");
+        JButton inputDataB = new JButton("INPUT DATA");
 
         //Add
-        add(inputDataB);
-        add(gridPlotB);
-        add(singlePlotB);
+        dataPanel.add(inputDataB);
+        graphPanel.add(gridPlotB);
+        graphPanel.add(singlePlotB);
+        add(dataPanel);
+        add(graphPanel);
 
-        //Define functions of buttons through action listeners.
-        gridPlotB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GridPlotWindow gridPlotWindow = new GridPlotWindow(ElectrodeDB);
-            }
-        });
-        singlePlotB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SinglePlotWindow singlePlotWindow = new SinglePlotWindow(ElectrodeDB);
-            }
-        });
-        //Here we should add a new action performed: ask user for catheter size
-        inputDataB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String source = UserDialogues.getFileSource();
+        //Define functions of buttons through action listeners      
+        gridPlotB.addActionListener(e -> new GridPlotWindow(ElectrodeDB));
+
+        singlePlotB.addActionListener(e -> new SinglePlotWindow(ElectrodeDB));
+
+        inputDataB.addActionListener(e -> {
+            String source = UserDialogues.getFileSource();
                 if(UserDialogues.extensionCheck(source)){
                     ElectrodeDB =  new ElectrodeDB(source);
                     ElectrodeDB.printElectrodes();
                 }
-            }
         });
     }
 }

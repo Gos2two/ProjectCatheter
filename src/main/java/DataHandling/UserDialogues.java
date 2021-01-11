@@ -3,6 +3,7 @@ package DataHandling;
 import org.apache.commons.compress.compressors.FileNameUtil;
 import org.apache.commons.io.FilenameUtils;
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 
 public interface UserDialogues {
@@ -66,15 +67,19 @@ public interface UserDialogues {
         JTextField colField = new JTextField(5);
 
         //Setting up panel with text fields for the user to input values
-        JPanel myPanel = new JPanel();
+        JPanel myPanel= new JPanel();
         myPanel.add(new JLabel("Number of rows:"));
         myPanel.add(rowField);
         myPanel.add(Box.createHorizontalStrut(15)); // a spacer
         myPanel.add(new JLabel("Number of columns:"));
         myPanel.add(colField);
 
+        //Define and scale new ImageIcon
+        ImageIcon icon= new ImageIcon(new ImageIcon("src/dimension.png").getImage().getScaledInstance(35,
+                35, Image.SCALE_SMOOTH));
+
         int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Please Enter Catheter Dimensions", JOptionPane.OK_CANCEL_OPTION);
+                "Please Enter Catheter Dimensions", JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,icon);
         if (result == JOptionPane.OK_OPTION) {
             System.out.println("Number of rows: " + rowField.getText());
             try

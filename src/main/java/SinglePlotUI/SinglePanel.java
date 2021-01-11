@@ -23,11 +23,13 @@ public class SinglePanel extends PlotPanel {
         //DEFINITIONS
         controlPanel = new JPanel();
         scrollPane = new JScrollPane(controlPanel);//Create scrollbar that will act on controlPanel
-        Unipolar[] electrodes = electrodeDB.getUnipolarArray(); //Instantiate ElectrodeArray: data from user:Data Handling
-        JFreeChart[] charts = new JFreeChart[numRows * numCol];//Create charts + Add charts to panel
+        Unipolar[] electrodes = electrodeDB.getElectrodeArray(); //Instantiate ElectrodeArray: data from user:Data Handling
+        JFreeChart[] charts = new JFreeChart[numRows * numCol];//Create charts
+        ChartPanel[] chartPanels = new ChartPanel[numRows * numCol];//Create chart panels
+        JToolBar toolBar = new JToolBar("Still draggable");
 
         //SET PANEL LAYOUT
-        setLayout(new GridLayout(1, 1));
+        setLayout(new BorderLayout());
         controlPanel.setLayout(new GridLayout(numRows * numCol, 1));
 
         //Scroll bars will only appear when necessary
@@ -39,18 +41,24 @@ public class SinglePanel extends PlotPanel {
 
             XYDataset dataset = createDataset(electrodes[i].getData()); //Create dataset of single electrode
             charts[i] = createChart(dataset, electrodes[i].getName(), electrodes, numRows, numCol); //Create chart element
-            ChartPanel chartPanel = new ChartPanel(charts[i]); //Create new chart panel
+            chartPanels[i] = new ChartPanel(charts[i]); //Create new chart panel
 
             //Set layout of chart panel
-            chartPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-            chartPanel.setPreferredSize(new Dimension(200, 130));
-            chartPanel.setMouseWheelEnabled(true);//Enables to zoom with mousewheel
-            chartPanel.setBackground(Color.white);
-            chartPanel.add(CreateZoom(chartPanel, electrodes, numRows, numCol, charts[i]));//Add buttons to restore axis
+          
+            chartPanels[i].addChartMouseListener(CreateMouseListener(chartPanels[i],electrodes,numRows,numCol,charts));
+            chartPanels[i].setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+            chartPanels[i].setPreferredSize(new Dimension(200, 130));
+            chartPanels[i].setMouseWheelEnabled(true);//Enables to zoom with mousewheel
+            chartPanels[i].setBackground(Color.white);
 
             //Add chart panels to control panel
-            controlPanel.add(chartPanel);
+            controlPanel.add(chartPanels[i]);
         }
+      
+        toolBar.add(restoreZoomB(chartPanels,electrodes,numRows,numCol,charts));//Add button to restore axis
+        toolBar.add(clearMarkers(charts));//Add a button to clear markers
+        toolBar.add(zoomAllB(numRows,numCol,charts));//Add button to zoom all charts
+        add(toolBar, BorderLayout.PAGE_START);//Add tool bar
         add(scrollPane);// Adds control panel (with scrollbar) to single panel
     }
 }
