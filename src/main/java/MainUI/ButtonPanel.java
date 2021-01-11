@@ -5,6 +5,7 @@ import DataHandling.UserDialogues;
 import GridPlotUI.GridPlotWindow;
 import SinglePlotUI.SinglePlotWindow;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,17 +18,24 @@ public class ButtonPanel extends JPanel {
 
 
     public ButtonPanel() {
+        JPanel dataPanel= new JPanel();
+        JPanel graphPanel= new JPanel();
+        //setLayouts
+        setLayout(new GridLayout(2,1));
+        dataPanel.setLayout(new FlowLayout());
+        graphPanel.setLayout(new FlowLayout(1,60,0));
         //Define
         gridPlotB = new JButton("GRID PLOT");
         singlePlotB = new JButton("SINGLE PLOT");
         inputDataB = new JButton("INPUT DATA");
         userDialogues = new UserDialogues();
 
-
         //Add
-        add(inputDataB);
-        add(gridPlotB);
-        add(singlePlotB);
+        dataPanel.add(inputDataB);
+        graphPanel.add(gridPlotB);
+        graphPanel.add(singlePlotB);
+        add(dataPanel);
+        add(graphPanel);
 
         //Define functions of buttons through action listeners.
         gridPlotB.addActionListener(new ActionListener() {
