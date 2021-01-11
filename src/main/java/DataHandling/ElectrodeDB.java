@@ -15,6 +15,8 @@ public class ElectrodeDB implements UserDialogues {
         return UnipolarArray;
     }
 
+    public Bipolar[] getBipolarArray() { return BipolarArray; }
+
     public int getNumRows() {
         return numRows;
     }
