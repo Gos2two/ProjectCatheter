@@ -5,6 +5,7 @@ import DataHandling.UserDialogues;
 import GridPlotUI.GridPlotWindow;
 import SinglePlotUI.SinglePlotWindow;
 import javax.swing.*;
+import java.awt.*;
 
 public class ButtonPanel extends JPanel {
     private UserDialogues userDialogues;

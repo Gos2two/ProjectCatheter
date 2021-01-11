@@ -13,7 +13,7 @@ public class MainPanel extends JPanel {
         //Define panels and icons
         ImageIcon icon= new ImageIcon(new ImageIcon("src/catheter.png").getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH));
         JLabel title = new JLabel("CATHETER LAB",icon,JLabel.CENTER);
-        BittonPanel buttonPanel = new ButtonPanel();
+        ButtonPanel buttonPanel = new ButtonPanel();
         ImagePanel images= new ImagePanel();
 
         //Add
