@@ -8,11 +8,10 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ButtonPanel extends JPanel {
+public class ButtonPanel extends JPanel implements UserDialogues  {
     private JButton gridPlotB;
     private JButton singlePlotB;
     private JButton inputDataB;
-    private UserDialogues userDialogues;
     private ElectrodeDB ElectrodeDB;
 
 
@@ -21,7 +20,6 @@ public class ButtonPanel extends JPanel {
         gridPlotB = new JButton("GRID PLOT");
         singlePlotB = new JButton("SINGLE PLOT");
         inputDataB = new JButton("INPUT DATA");
-        userDialogues = new UserDialogues();
 
 
         //Add
@@ -46,9 +44,11 @@ public class ButtonPanel extends JPanel {
         inputDataB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                userDialogues.getFileSource();
-                ElectrodeDB =  new ElectrodeDB(userDialogues.getExcelFilePath());
-                ElectrodeDB.printElectrodes();
+                String source = UserDialogues.getFileSource();
+                if(UserDialogues.extensionCheck(source)){
+                    ElectrodeDB =  new ElectrodeDB(source);
+                    ElectrodeDB.printElectrodes();
+                }
             }
         });
     }

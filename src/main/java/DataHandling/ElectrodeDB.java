@@ -10,7 +10,7 @@ public class ElectrodeDB {
         //Retrieve the dataset
         String[] names = Dataset.getElectrodeNames();
         Double[][] Data = Dataset.getDataset();
-        Double[] tempData = new Double[Data.length];
+        Double[] tempData;
         ElectrodeArray = new Unipolar[Data[0].length];
 
         //Segment data into objects and construct DB

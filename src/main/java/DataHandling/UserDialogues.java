@@ -1,20 +1,16 @@
 package DataHandling;
 
+import org.apache.commons.compress.compressors.FileNameUtil;
+import org.apache.commons.io.FilenameUtils;
 import javax.swing.*;
 import java.io.File;
 
-public class UserDialogues {
-    protected String excelFilePath;
+public interface UserDialogues {
 
-    public UserDialogues(){
-    }
-    public String getExcelFilePath(){
-        return excelFilePath;
-    }
-    protected void setExcelFilePath(String excelFilePath){
-        this.excelFilePath=excelFilePath;
-    }
-    public void getFileSource(){
+    static String getFileSource() {
+        //Define String
+        String excelFilePath = new String();
+
         //Frame and Panel for the Dialog Window.
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -27,10 +23,31 @@ public class UserDialogues {
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-            setExcelFilePath(selectedFile.getAbsolutePath());
+            excelFilePath = selectedFile.getAbsolutePath();
+        }
+        return excelFilePath;
+    }
+
+    static boolean extensionCheck(String excelFilePath){
+        String extension = FilenameUtils.getExtension(excelFilePath);
+
+        if(!extension.equals("xlsx")){
+            JFrame frame = new JFrame();
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setVisible(true);
+
+            JOptionPane.showMessageDialog(frame,
+                    "Wrong file format.Please select an excel file with .xlsx extention.",
+                    "Inane error",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        else{
+            return true;
         }
     }
-    public int[] getGridDimensions(){
+
+    static int[] getGridDimensions(){
         //Define temporal int[] to store grid dimensions
         int[] gridDimensions = new int[2];
         JTextField rowField = new JTextField(5);

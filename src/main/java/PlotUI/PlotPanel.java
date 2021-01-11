@@ -32,11 +32,10 @@ public class PlotPanel extends JPanel {
     private void setDimensions(){
 
         //Define temporal variables
-        UserDialogues userDialogues = new UserDialogues();
         int[] gridDimensions = new int[2];
 
         //Call method from user dialogues to get dimensions
-        gridDimensions = userDialogues.getGridDimensions();
+        gridDimensions = UserDialogues.getGridDimensions();
         numRows = gridDimensions[0];
         numCol = gridDimensions[1];
     }
