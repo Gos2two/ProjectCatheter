@@ -19,7 +19,7 @@ public class ButtonPanel extends JPanel implements UserDialogues {
         //SetLayouts
         setLayout(new GridLayout(2,1));
         dataPanel.setLayout(new FlowLayout());
-        graphPanel.setLayout(new FlowLayout(1,60,0));
+        graphPanel.setLayout(new FlowLayout(FlowLayout.CENTER,60,0));
       
         //Define
         JButton gridPlotB = new JButton("GRID PLOT");

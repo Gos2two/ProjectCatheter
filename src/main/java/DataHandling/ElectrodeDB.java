@@ -3,6 +3,8 @@ package DataHandling;
 public class ElectrodeDB implements UserDialogues {
     private Unipolar[] UnipolarArray;
     private Bipolar[] BipolarArray;
+    private int numRows;
+    private int numCols;
 
     public ElectrodeDB(String path){
         initUnipolarArray(path);
@@ -13,10 +15,26 @@ public class ElectrodeDB implements UserDialogues {
         return UnipolarArray;
     }
 
+    public int getNumRows() {
+        return numRows;
+    }
+
+    public int getNumCols() {
+        return numCols;
+    }
+
+    private void setNumRows(int numRows) {
+        this.numRows = numRows;
+    }
+
+    private void setNumCols(int numCol) {
+        this.numCols = numCol;
+    }
+
     public void printElectrodes(){
-        for(int i = 0; i< UnipolarArray.length; i++){
-            System.out.println(UnipolarArray[i].getName());
-            System.out.println(UnipolarArray[i].getData().length);
+        for (Unipolar unipolar : UnipolarArray) {
+            System.out.println(unipolar.getName());
+            System.out.println(unipolar.getData().length);
         }
     }
 
@@ -43,11 +61,16 @@ public class ElectrodeDB implements UserDialogues {
     }
 
     private void initBipolarArray(){
-        int[] dim = UserDialogues.getGridDimensions();
+        //Definitions: Grid Dimensions
+        int[] dim = UserDialogues.getGridDimensions();//Call method from user dialogues to get dimensions
         int rows = dim[0];
         int cols = dim[1];
         int combs_rows = dim[0]*(dim[1]-1);
         int combs_cols = dim[1]*(dim[0]-1);
+
+        //Set numRows and numCol
+        setNumRows(rows);
+        setNumCols(cols);
 
         BipolarArray =  new Bipolar[combs_rows+combs_cols];
         for(int i=0; i<rows;i++){
