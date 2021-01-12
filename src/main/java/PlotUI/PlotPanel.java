@@ -2,7 +2,6 @@ package PlotUI;
 
 import DataHandling.ElectrodeDB;
 import DataHandling.Unipolar;
-import DataHandling.UserDialogues;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.ui.LengthAdjustmentType;
@@ -103,6 +102,28 @@ public class PlotPanel extends JPanel {
                 }
             }
         });
+    }
+
+    protected JToggleButton hideName(int numRows, int numCol, JFreeChart[] charts,Unipolar[] electrodes){
+        //create toggle button to hide title name
+        JToggleButton hideName= new JToggleButton("Hide Name");
+
+        hideName.addItemListener(ev -> {
+            if(hideName.isSelected()){
+                for(int i = 0; i < (numRows*numCol); i++) {
+                    charts[i].setTitle("");
+
+                }
+                hideName.setText("Hide Name: ON");
+            }
+            else{
+                for(int i = 0; i < (numRows*numCol); i++) {
+                    charts[i].setTitle(electrodes[i].getName());
+                }
+                hideName.setText("Hide Name");
+            }
+        });
+        return hideName;
     }
 
     protected JButton clearMarkers( JFreeChart[] charts){
@@ -232,5 +253,7 @@ public class PlotPanel extends JPanel {
         }
         return maxElement;
     }
+
+
 }
 
