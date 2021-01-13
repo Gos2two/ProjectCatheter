@@ -118,7 +118,7 @@ public class PlotPanel extends JPanel {
         });
     }
 
-    protected JToggleButton hideName(int numRows, int numCol, JFreeChart[] charts,Electrode[] electrodes){
+    protected JToggleButton hideNameB(int numRows, int numCol, JFreeChart[] charts,Electrode[] electrodes){
         //create toggle button to hide title name
         JToggleButton hideName= new JToggleButton("Hide Name");
 
