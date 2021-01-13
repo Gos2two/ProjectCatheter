@@ -56,7 +56,7 @@ public class SinglePanel extends PlotPanel {
 
         //Add
         toolBar.add(restoreZoomB(chartPanels,electrodes,numRows,numCols,charts));//Add button to restore axis
-        toolBar.add(clearMarkers(charts));//Add a button to clear markers
+        toolBar.add(clearMarkersB(charts,numRows,numCols));//Add a button to clear markers
         toolBar.add(zoomAllB(numRows,numCols,charts));//Add button to zoom all charts
         toolBar.add(hideNameB(numRows,numCols,charts,electrodes));//Add button to hide Title Name
 

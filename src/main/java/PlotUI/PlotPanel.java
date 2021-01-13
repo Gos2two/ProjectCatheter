@@ -2,6 +2,7 @@ package PlotUI;
 
 import DataHandling.Electrode;
 import DataHandling.ElectrodeDB;
+import DataHandling.Rotation;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.ui.LengthAdjustmentType;
@@ -48,7 +49,6 @@ public class PlotPanel extends JPanel {
         else{
             combsRows = (totalE/2)+1;
         }
-
         combsCols = 2;
     }
 
@@ -105,8 +105,8 @@ public class PlotPanel extends JPanel {
     protected JButton restoreZoomB(ChartPanel[] chartPanels, Electrode[] electrodes, int numRows, int numCol, JFreeChart[] charts){
 
         double finalMaxElement= getMaxValue(electrodes,numRows,numCol);
-        //Create button to restore axis after zoom.
 
+        //Create button to restore axis after zoom.
         return new JButton(new AbstractAction("Restore Axis") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -140,9 +140,9 @@ public class PlotPanel extends JPanel {
         return hideName;
     }
 
-    protected JButton clearMarkers( JFreeChart[] charts){
-        //Create button to remove markers.
+    protected JButton clearMarkersB(JFreeChart[] charts,int numRows, int numCols){
 
+        //Create button to remove markers.
         return new JButton(new AbstractAction("Clear Markers") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -154,8 +154,27 @@ public class PlotPanel extends JPanel {
             }
         });
     }
+    protected JButton rotateGridB(int numRows, int numCols, Rotation rotationC,ChartPanel[] chartPanel, JPanel gridChartPanel){
+
+        //Create button to rotate grid.
+        return new JButton(new AbstractAction("Rotate") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gridChartPanel.removeAll();
+                rotationC.rotate();
+                int[][] rotMatrix = rotationC.getRot_matrix();
+
+                for(int i = 0; i < numRows; i++){
+                    for(int j = 0; j < numCols; j++){
+                        gridChartPanel.add(chartPanel[rotMatrix[i][j]-1]);
+                    }
+                }
+                gridChartPanel.revalidate();
+            }
+        });
+    }
   
-    protected ChartMouseListener CreateMouseListener(ChartPanel chartPanel, Electrode[] electrodes, int numRows, int numCol, JFreeChart[] charts) {
+    protected ChartMouseListener CreateMouseListener(ChartPanel chartPanel, Electrode[] electrodes, int numRows, int numCol, JFreeChart[] charts){
       
         return new ChartMouseListener(){
         @Override

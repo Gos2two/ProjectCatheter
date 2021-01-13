@@ -1,6 +1,7 @@
 package GridPlotUI;
 
 import DataHandling.ElectrodeDB;
+import DataHandling.Rotation;
 import DataHandling.Unipolar;
 import PlotUI.PlotPanel;
 import org.jfree.chart.ChartPanel;
@@ -18,6 +19,7 @@ public class GridPanel extends PlotPanel {
         //DEFINITIONS
         JPanel gridChartPanel = new JPanel();
         Unipolar[] electrodes = electrodeDB.getUnipolarArray(); //Instantiate ElectrodeArray: data from user:Data Handling
+        Rotation rotationC = new Rotation();
         JFreeChart[] charts = new JFreeChart[numRows * numCols];//Create charts
         ChartPanel[] chartPanels = new ChartPanel[numRows * numCols];//Create chart panels
         JToolBar toolBar = new JToolBar("Still draggable");
@@ -43,10 +45,12 @@ public class GridPanel extends PlotPanel {
             gridChartPanel.add(chartPanels[i]);
         }
         toolBar.add(restoreZoomB(chartPanels,electrodes,numRows,numCols,charts));//Add button to restore axis
-        toolBar.add(clearMarkers(charts));//Add a button to clear markers
+        toolBar.add(clearMarkersB(charts,numRows,numCols));//Add a button to clear markers
+        toolBar.add(rotateGridB(numRows, numCols, rotationC, chartPanels, gridChartPanel));//Add button to rotate grid
         toolBar.add(zoomAllB(numRows,numCols,charts));//Add button to zoom all charts
         toolBar.add(hideNameB(numRows,numCols,charts,electrodes));//Add button to hide Title Name
 
+        gridChartPanel.revalidate();
         add(toolBar, BorderLayout.PAGE_START);//Add tool bar
         add(gridChartPanel);
     }

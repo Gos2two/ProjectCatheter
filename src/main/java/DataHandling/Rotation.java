@@ -21,6 +21,10 @@ public class Rotation {
         }
     }
 
+    public int[][] getRot_matrix() {
+        return rot_matrix;
+    }
+
     private void init_rings() {
         num_rings = (int) Math.floor((num_rows+num_cols)/ 4);
     }
