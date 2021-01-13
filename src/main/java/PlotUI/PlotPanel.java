@@ -1,7 +1,7 @@
 package PlotUI;
 
+import DataHandling.Electrode;
 import DataHandling.ElectrodeDB;
-import DataHandling.Unipolar;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.ui.LengthAdjustmentType;
@@ -27,15 +27,29 @@ import static java.lang.StrictMath.abs;
 public class PlotPanel extends JPanel {
 
     protected int numRows;
-    protected int numCol;
+    protected int numCols;
+    protected int combsRows;
+    protected int combsCols;
 
     public PlotPanel(ElectrodeDB electrodeDB){ setDimensions(electrodeDB); }
 
     //PROTECTED METHODS SHARED BY GRID AND SINGLE PANEL
 
     private void setDimensions(ElectrodeDB electrodeDB){
+        //Unipolar
         numRows = electrodeDB.getNumRows();
-        numCol = electrodeDB.getNumCols();
+        numCols = electrodeDB.getNumCols();
+        //Bipolar
+        int totalE = numRows*(numCols-1)+numCols*(numRows-1);
+
+        if(totalE % 2 == 0){
+            combsRows = totalE/2;
+        }
+        else{
+            combsRows = (totalE/2)+1;
+        }
+
+        combsCols = 2;
     }
 
     protected XYDataset createDataset(Double[] electrode){
@@ -51,7 +65,7 @@ public class PlotPanel extends JPanel {
         return dataset;
     }
 
-    protected JFreeChart createChart(XYDataset dataset, String title, Unipolar[] electrodes, int numRows, int numCol) {
+    protected JFreeChart createChart(XYDataset dataset, String title, Electrode[] electrodes, int numRows, int numCol) {
 
         JFreeChart chart = ChartFactory.createXYLineChart(
                 title,
@@ -88,7 +102,7 @@ public class PlotPanel extends JPanel {
         return chart;
     }
 
-    protected JButton restoreZoomB(ChartPanel[] chartPanels, Unipolar[] electrodes, int numRows, int numCol, JFreeChart[] charts){
+    protected JButton restoreZoomB(ChartPanel[] chartPanels, Electrode[] electrodes, int numRows, int numCol, JFreeChart[] charts){
 
         double finalMaxElement= getMaxValue(electrodes,numRows,numCol);
         //Create button to restore axis after zoom.
@@ -104,7 +118,7 @@ public class PlotPanel extends JPanel {
         });
     }
 
-    protected JToggleButton hideName(int numRows, int numCol, JFreeChart[] charts,Unipolar[] electrodes){
+    protected JToggleButton hideName(int numRows, int numCol, JFreeChart[] charts,Electrode[] electrodes){
         //create toggle button to hide title name
         JToggleButton hideName= new JToggleButton("Hide Name");
 
@@ -132,7 +146,7 @@ public class PlotPanel extends JPanel {
         return new JButton(new AbstractAction("Clear Markers") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for(int i = 0; i < (numRows*numCol); i++){
+                for(int i = 0; i < (numRows*numCols); i++){
                     XYPlot scopeXYPlot = charts[i].getXYPlot();
                     scopeXYPlot.clearDomainMarkers();
                     scopeXYPlot.setRangeCrosshairVisible(false);
@@ -141,7 +155,7 @@ public class PlotPanel extends JPanel {
         });
     }
   
-    protected ChartMouseListener CreateMouseListener(ChartPanel chartPanel, Unipolar[] electrodes, int numRows, int numCol, JFreeChart[] charts) {
+    protected ChartMouseListener CreateMouseListener(ChartPanel chartPanel, Electrode[] electrodes, int numRows, int numCol, JFreeChart[] charts) {
       
         return new ChartMouseListener(){
         @Override
@@ -238,7 +252,7 @@ public class PlotPanel extends JPanel {
         return zoomAll;
     }
 
-    protected double getMaxValue(Unipolar[] electrodes, int numRows, int numCol){
+    protected double getMaxValue(Electrode[] electrodes, int numRows, int numCol){
 
         //Calculate max. abs. value amongst all data
         double maxElement=0;
