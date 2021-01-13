@@ -118,6 +118,28 @@ public class PlotPanel extends JPanel {
         });
     }
 
+    protected JToggleButton hideName(int numRows, int numCol, JFreeChart[] charts,Electrode[] electrodes){
+        //create toggle button to hide title name
+        JToggleButton hideName= new JToggleButton("Hide Name");
+
+        hideName.addItemListener(ev -> {
+            if(hideName.isSelected()){
+                for(int i = 0; i < (numRows*numCol); i++) {
+                    charts[i].setTitle("");
+
+                }
+                hideName.setText("Hide Name: ON");
+            }
+            else{
+                for(int i = 0; i < (numRows*numCol); i++) {
+                    charts[i].setTitle(electrodes[i].getName());
+                }
+                hideName.setText("Hide Name");
+            }
+        });
+        return hideName;
+    }
+
     protected JButton clearMarkers( JFreeChart[] charts){
         //Create button to remove markers.
 
@@ -245,5 +267,7 @@ public class PlotPanel extends JPanel {
         }
         return maxElement;
     }
+
+
 }
 
