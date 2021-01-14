@@ -9,16 +9,11 @@ public class Rotation {
     private int counter;
     private int num_rings;
 
-    public Rotation(){
-        num_cols =4;
-        num_rows =4;
+    public Rotation(int rows, int cols){
+        num_cols = cols;
+        num_rows = rows;
         init_rings();
         reset_matrix();
-        for(int i=0;i<12;i++){
-            rotate();
-            System.out.println(Arrays.deepToString(rot_matrix));
-            System.out.println(counter);
-        }
     }
 
     public int[][] getRot_matrix() {

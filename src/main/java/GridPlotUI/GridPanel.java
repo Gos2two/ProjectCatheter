@@ -19,7 +19,7 @@ public class GridPanel extends PlotPanel {
         //DEFINITIONS
         JPanel gridChartPanel = new JPanel();
         Unipolar[] electrodes = electrodeDB.getUnipolarArray(); //Instantiate ElectrodeArray: data from user:Data Handling
-        Rotation rotationC = new Rotation();
+        Rotation rotationC = new Rotation(numRows,numCols);
         JFreeChart[] charts = new JFreeChart[numRows * numCols];//Create charts
         ChartPanel[] chartPanels = new ChartPanel[numRows * numCols];//Create chart panels
         JToolBar toolBar = new JToolBar("Still draggable");

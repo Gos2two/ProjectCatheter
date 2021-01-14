@@ -51,8 +51,6 @@ public class ElectrodeDB implements UserDialogues {
         UnipolarArray = new Unipolar[Data[0].length];
 
         //Segment data into objects and construct DB
-
-
         for(int i=0;i<Data[0].length;i++){
             tempData = new Double[Data.length];
             for(int j=0;j<Data.length;j++){
