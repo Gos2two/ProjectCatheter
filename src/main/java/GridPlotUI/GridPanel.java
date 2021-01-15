@@ -1,12 +1,12 @@
 package GridPlotUI;
 
 import DataHandling.ElectrodeDB;
+import DataHandling.Rotation;
 import DataHandling.Unipolar;
 import PlotUI.PlotPanel;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYDataset;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -14,31 +14,44 @@ public class GridPanel extends PlotPanel {
 
     public GridPanel(ElectrodeDB electrodeDB){
 
-        super(); //Initialize super class: gets catheter dimensions
+        super(electrodeDB); //Initialize super class: gets catheter dimensions
 
         //DEFINITIONS
-        Unipolar[] electrodes = electrodeDB.getElectrodeArray(); //Instantiate ElectrodeArray: data from user:Data Handling
-        JFreeChart[] charts = new JFreeChart[numRows * numCol];//Create charts + Add charts to panel
+        JPanel gridChartPanel = new JPanel();
+        Unipolar[] electrodes = electrodeDB.getUnipolarArray(); //Instantiate ElectrodeArray: data from user:Data Handling
+        Rotation rotationC = new Rotation(numRows,numCols);
+        JFreeChart[] charts = new JFreeChart[numRows * numCols];//Create charts
+        ChartPanel[] chartPanels = new ChartPanel[numRows * numCols];//Create chart panels
+        JToolBar toolBar = new JToolBar("Still draggable");
 
         //SET PANEL LAYOUT
-        setLayout(new GridLayout(numRows,numCol));
+        setLayout(new BorderLayout());
+        gridChartPanel.setLayout(new GridLayout(numRows,numCols));
 
         //FILL CHARTS WITH DATA AND FUNCTIONALITY + ADD THEM TO GRID PANEL
-        for(int i=0; i<(numRows*numCol); i++){
+        for(int i=0; i<(numRows*numCols); i++){
 
             XYDataset dataset = createDataset(electrodes[i].getData()); //Create dataset of single electrode
-            charts[i] = createChart(dataset, electrodes[i].getName(),electrodes,numRows,numCol);//Create chart element
-            ChartPanel chartPanel = new ChartPanel(charts[i]);//Create new chart panel
+            charts[i] = createChart(dataset, electrodes[i].getName(),electrodes,numRows,numCols);//Create chart element
+            chartPanels[i] = new ChartPanel(charts[i]);//Create new chart panel
 
             //Set layout of chart panel
-            chartPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            chartPanel.setBackground(Color.white);
-            chartPanel.setMouseWheelEnabled(true); //Enable to zoom with mousewheel
-            chartPanel.add(CreateZoom(chartPanel,electrodes,numRows,numCol,charts[i]));//Add buttons to restore axis
+            chartPanels[i].addChartMouseListener(CreateMouseListener(chartPanels[i],electrodes,numRows,numCols,charts));
+            chartPanels[i].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            chartPanels[i].setBackground(Color.white);
+            chartPanels[i].setMouseWheelEnabled(true); //Enable to zoom with mousewheel
 
             //Add chart panels to control panel
-            add(chartPanel);
+            gridChartPanel.add(chartPanels[i]);
         }
+        toolBar.add(restoreZoomB(chartPanels,electrodes,numRows,numCols,charts));//Add button to restore axis
+        toolBar.add(clearMarkersB(charts,numRows,numCols));//Add a button to clear markers
+        toolBar.add(rotateGridB(numRows, numCols, rotationC, chartPanels, gridChartPanel));//Add button to rotate grid
+        toolBar.add(zoomAllB(numRows,numCols,charts));//Add button to zoom all charts
+        toolBar.add(hideNameB(numRows,numCols,charts,electrodes));//Add button to hide Title Name
 
+        gridChartPanel.revalidate();
+        add(toolBar, BorderLayout.PAGE_START);//Add tool bar
+        add(gridChartPanel);
     }
 }
