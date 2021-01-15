@@ -1,5 +1,6 @@
 package DataHandling;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -21,7 +22,7 @@ public class ReadExcelFileTest {
         catch (IndexOutOfBoundsException e){
             bThrown = true;
         }
-        assertEquals(bThrown, false);
+        Assert.assertEquals(bThrown, false);
     }
     @Test
     public void shouldNotReadNonExcelFile(){
@@ -35,7 +36,7 @@ public class ReadExcelFileTest {
         catch (Exception e){
             bThrown = true;
         }
-        assertEquals(bThrown, true);
+        Assert.assertEquals(bThrown, true);
     }
 
     @Test
@@ -50,7 +51,7 @@ public class ReadExcelFileTest {
         datatest [1][0] = -0.23479999601840973;
         datatest [1][1] = -0.10750000178813934;
         Dataset = file.getDataset();
-        assertArrayEquals(Dataset, datatest);
+        Assert.assertArrayEquals(Dataset, datatest);
     }
     @Test
     public void shouldGetElectrodeNames() {
@@ -63,7 +64,7 @@ public class ReadExcelFileTest {
         TestNames[0] = "mini-egmUNI1";
         TestNames[1] = "mini-egmUNI2";
 
-        assertArrayEquals(ElectrodeNames, TestNames);
+        Assert.assertArrayEquals(ElectrodeNames, TestNames);
     }
 
 

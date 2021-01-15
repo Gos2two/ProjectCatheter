@@ -1,5 +1,6 @@
 package DataHandling;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -12,7 +13,7 @@ public class ElectrodeTest {
         //Initialize an electrode w/ arbitrary values
         electrode = new Electrode("egmTest1", data);
         //Test the .getName() function
-        assertEquals("egmTest1", electrode.getName());
+        Assert.assertEquals("egmTest1", electrode.getName());
     }
 
     @Test
@@ -31,7 +32,7 @@ public class ElectrodeTest {
         electrode = new Electrode("egmTest1", data);
 
         //Tests the .getData() function
-        assertEquals(expectedData, electrode.getData());
+        Assert.assertEquals(expectedData, electrode.getData());
     }
 @Test
     public void shouldSetData() {
@@ -50,7 +51,7 @@ public class ElectrodeTest {
         electrode.setData(data);
 
         //Tests the setData() function
-        assertEquals(expectedData, electrode.getData());
+        Assert.assertEquals(expectedData, electrode.getData());
     }
 
     @Test
@@ -61,7 +62,7 @@ public class ElectrodeTest {
         electrode = new Electrode("test", data);
         electrode.setName("egmTest1");
         //Testing the setName() function
-        assertEquals("egmTest1", electrode.getName());
+        Assert.assertEquals("egmTest1", electrode.getName());
 
     }
 }
