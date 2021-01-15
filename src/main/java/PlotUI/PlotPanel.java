@@ -254,7 +254,7 @@ public class PlotPanel extends JPanel {
                     charts[i].getXYPlot().setRangeAxis(range[0]);
                     charts[i].getXYPlot().setDomainAxis(domain[0]);
                 }
-                zoomAll.setText("Zoom All:On");
+                zoomAll.setText("Zoom All: ON");
             }
             else {
                 for (int i = 0; i < (numRows * numCol); i++) {
@@ -263,7 +263,7 @@ public class PlotPanel extends JPanel {
                     charts[i].getXYPlot().setRangeAxis(range[i]);
                     charts[i].getXYPlot().setDomainAxis(domain[i]);
                 }
-                zoomAll.setText("Zoom All:Off");
+                zoomAll.setText("Zoom All: OFF");
             }
         };
         zoomAll.addItemListener(itemListener);
