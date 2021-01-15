@@ -34,9 +34,17 @@ public class ButtonPanel extends JPanel implements UserDialogues {
         add(graphPanel);
 
         //Define functions of buttons through action listeners      
-        gridPlotB.addActionListener(e -> new GridPlotWindow(ElectrodeDB));
+        gridPlotB.addActionListener(e -> {
+            if (UserDialogues.dataInputCheck(ElectrodeDB)) {
+                new GridPlotWindow(ElectrodeDB);
+            }
+        });
 
-        singlePlotB.addActionListener(e -> new SinglePlotWindow(ElectrodeDB));
+        singlePlotB.addActionListener(e -> {
+            if (UserDialogues.dataInputCheck(ElectrodeDB)) {
+                new SinglePlotWindow(ElectrodeDB);
+            }
+        });
 
         inputDataB.addActionListener(e -> {
             String source = UserDialogues.getFileSource();
