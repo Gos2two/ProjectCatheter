@@ -19,7 +19,7 @@ public class ReadExcelFile {
         OpenExcelFile(path);
     }
 
-    private void OpenExcelFile(String path){
+    public void OpenExcelFile(String path){
         try {
             FileInputStream file = new FileInputStream(new File(path));
             //Create Workbook instance holding reference to .xlsx file
