@@ -1,5 +1,5 @@
 # ProjectCatheter
-Catheter Lab is an interface for viewing multipolar ECG data. 
+Catheter Lab is an interface for viewing multipolar catheter data. 
 
 Instructions:
 
@@ -32,14 +32,10 @@ Zooming:
 Other functionality:
 
 -"Rotate" rearranges the grid view to correspond to a step rotation. This corresponds to different orientations of the grid catheter. 
-
- This is meant to use with catheters that have square arrangements of electrodes (4 by 4, 5 by 5, etc).
  
 -The "Hide Name" button toggles graph titles on or off.
 
 Known issues:
-
--Rotation only works properly for n by n matrices. For some rectangular arrangements, part of the plots may disappear.
 
 -Bipolar view includes some additional unnecessary plots. 
 
