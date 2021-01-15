@@ -40,7 +40,7 @@ public interface UserDialogues {
         if(!extension.equals("xlsx") && (!excelFilePath.equals("Cancel_option")) ){
             frame.setVisible(true);
             JOptionPane.showMessageDialog(frame,
-                    "Wrong file format.Please select an excel file with .xlsx extension.",
+                    "Wrong file format. Please select an excel file with .xlsx extension.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
             return false;
@@ -48,9 +48,28 @@ public interface UserDialogues {
         else if(excelFilePath.equals("Cancel_option")){
             frame.setVisible(true);
             JOptionPane.showMessageDialog(frame,
-                    "No file Selected",
+                    "No file selected",
                     "Error",
                     JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        else{
+            frame.setVisible(false);
+            return true;
+        }
+    }
+
+    static boolean dataInputCheck(ElectrodeDB electrodeDB){
+
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        if(electrodeDB == null){
+            frame.setVisible(true);
+            JOptionPane.showMessageDialog(frame,
+                    "No electrode data. Please input data.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return false;
         }
         else{
