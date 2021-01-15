@@ -23,7 +23,7 @@ Markers:
 
 Zooming:
 
--Clicking and dragging to highlight an area zooms in on that area. Alternatively, scroll wheel can be used to zoom in.
+-Clicking and dragging to highlight an area zooms in on that area. Additionally, scroll wheel can be used to zoom in or out.
 
 -By default, zooming is restricted to one graph. Pressing the "Zoom All" button links the axes together. 
 
