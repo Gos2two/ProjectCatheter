@@ -37,7 +37,7 @@ Other functionality:
 
 Known issues:
 
--Bipolar view includes some additional unnecessary plots. 
+- Rotation doesn't work if the innermost ring is a single line. Can be amended if more time.
 
 -Some combinations of repeated zooming and resetting may cause the graph titles or data marker labels to appear stretched. 
 
