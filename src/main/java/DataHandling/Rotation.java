@@ -2,6 +2,8 @@ package DataHandling;
 
 import java.util.Arrays;
 
+import static java.lang.Integer.min;
+
 public class Rotation {
     private int num_rows;
     private int num_cols;
@@ -21,7 +23,8 @@ public class Rotation {
     }
 
     private void init_rings() {
-        num_rings = (int) Math.floor((num_rows+num_cols)/ 4);
+        int min_num = min(num_cols,num_rows);
+        num_rings = (int) Math.floor(min_num/2);
     }
 
     private void reset_matrix() {
