@@ -37,7 +37,7 @@ Other functionality:
 
 Known issues:
 
-- Rotation doesn't work if the innermost ring is a single line. Can be amended if more time.
+- Rotation doesn't work if the innermost ring is a single line.
 
 -Some combinations of repeated zooming and resetting may cause the graph titles or data marker labels to appear stretched. 
 
